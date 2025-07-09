@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # NFA to DFA Converter
 
 An interactive web application for learning automata theory, specifically focused on converting Non-Deterministic Finite Automata (NFA) to Deterministic Finite Automata (DFA) using the subset construction algorithm.
