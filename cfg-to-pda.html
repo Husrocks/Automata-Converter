@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CFG → PDA | Automata Visualizer Pro</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <script src="js/theme.js" defer></script>
+  <script src="js/graph-renderer.js" defer></script>
+  <script src="js/visual-builder.js" defer></script>
+  <script src="js/solved-examples.js"></script>
+  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+  <nav class="navbar glass">
+    <div class="brand">
+      <span class="brand-title">Automata Visualizer Pro</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="nfa-to-dfa.html">NFA → DFA</a></li>
+      <li><a href="enfa-to-nfa.html">ε-NFA → NFA</a></li>
+      <li><a href="nfa-to-regex.html">NFA → RegEx</a></li>
+      <li><a href="regex-to-nfa.html">RegEx → NFA</a></li>
+      <li><a href="toa-to-fa.html">TOA → FA</a></li>
+      <li><a href="pda-to-cfg.html">PDA → CFG</a></li>
+      <li><a href="cfg-to-pda.html" class="active">CFG → PDA</a></li>
+      <li><a href="tm-to-fa.html">TM → FA</a></li>
+      <li><a href="dfa-minimizer.html">DFA Minimizer</a></li>
+    </ul>
+    <button id="theme-toggle" aria-label="Toggle theme"><span id="theme-icon">🌙</span></button>
+  </nav>
+  <main>
+    <section class="glass" style="max-width: 900px; margin: 2rem auto; padding: 2rem;">
+      <h1 class="gradient" style="font-size:2rem; font-weight:bold;">CFG → PDA Converter</h1>
+      <p>Build your context-free grammar visually, then see the equivalent pushdown automaton and step-by-step conversion.</p>
+      <!-- Remove the builder-controls button group for CFG input -->
+      <div class="cfg-input-container" style="margin-bottom:1rem;">
+        <label for="cfg-input"><b>Enter CFG (one production per line, e.g. S → aSb | ε):</b></label>
+        <textarea id="cfg-input" rows="6" style="width:100%;font-family:monospace;"></textarea>
+        <button id="parse-cfg-btn" class="btn-primary" style="margin-top:0.5rem;">Parse CFG</button>
+      </div>
+      <div id="parsed-cfg-output" class="glass" style="margin-bottom:2rem;padding:1rem;"></div>
+      <div style="text-align:right;">
+        <button id="convert-btn" class="btn-primary">Convert to PDA</button>
+      </div>
+      <div class="canvas-container glass" style="margin-top:2rem;">
+        <div id="dfa-graph-vis" style="width:100%;height:340px;"></div>
+      </div>
+      <div id="step-by-step" class="glass" style="margin-top:2rem; padding:1rem;">
+        <h2 style="font-size:1.2rem;">Step-by-Step Explanation</h2>
+        <div id="steps-content">(Conversion steps will appear here.)</div>
+      </div>
+      <div id="solved-examples" class="glass" style="margin-top:2rem; padding:1rem;">
+        <h2 style="font-size:1.2rem;">Solved Examples</h2>
+        <div id="examples-content">(Example problems will appear here.)</div>
+      </div>
+    </section>
+  </main>
+  <footer class="glass custom-footer">
+    <span class="footer-text">© 2024 Automata Visualizer Pro</span>
+    <span class="footer-icons">
+      <a href="https://github.com/Husrocks" target="_blank" aria-label="GitHub" class="footer-icon-link">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" class="footer-icon"><path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.5 2.87 8.32 6.84 9.67.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.36-3.37-1.36-.45-1.18-1.1-1.5-1.1-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.38 9.38 0 0 1 12 6.84c.85.004 1.7.12 2.5.35 1.9-1.33 2.74-1.05 2.74-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.8 0 .26.18.57.69.47A10.01 10.01 0 0 0 22 12.26C22 6.58 17.52 2 12 2Z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/hussnain-bashir/" target="_blank" aria-label="LinkedIn" class="footer-icon-link">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" class="footer-icon"><path d="M16 8a6 6 0 0 1 6 6v5.25c0 .41-.34.75-.75.75h-3.5a.75.75 0 0 1-.75-.75V14a2 2 0 0 0-4 0v5.25c0 .41-.34.75-.75.75h-3.5A.75.75 0 0 1 4 19.25V8.75C4 8.34 4.34 8 4.75 8h3.5c.41 0 .75.34.75.75v10.5c0 .41-.34.75-.75.75h-3.5A.75.75 0 0 1 4 19.25Z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/imhussnain.001/" target="_blank" aria-label="Instagram" class="footer-icon-link">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" class="footer-icon"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="5"/><circle cx="18" cy="6" r="1.5"/></svg>
+      </a>
+    </span>
+  </footer>
+</body>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  // CFG input parsing logic
+  const input = document.getElementById('cfg-input');
+  const parseBtn = document.getElementById('parse-cfg-btn');
+  const output = document.getElementById('parsed-cfg-output');
+  if (input && parseBtn && output) {
+    parseBtn.onclick = () => {
+      output.innerHTML = '';
+      const lines = input.value.trim().split('\n').filter(Boolean);
+      const productions = {};
+      let variables = new Set();
+      let terminals = new Set();
+      let startVariable = null;
+      for (const line of lines) {
+        const [left, right] = line.split('→').map(s => s.trim());
+        if (!left || !right) continue;
+        if (!startVariable) startVariable = left;
+        variables.add(left);
+        productions[left] = right.split('|').map(r => r.trim());
+        for (const prod of productions[left]) {
+          for (const ch of prod) {
+            if (ch >= 'A' && ch <= 'Z') variables.add(ch);
+            else if (ch !== 'ε') terminals.add(ch);
+          }
+        }
+      }
+      output.innerHTML = `
+        <b>Variables:</b> ${Array.from(variables).join(', ')}<br/>
+        <b>Terminals:</b> ${Array.from(terminals).join(', ')}<br/>
+        <b>Start:</b> ${startVariable}<br/>
+        <b>Productions:</b><br/>
+        ${Object.entries(productions).map(([v, prods]) => `${v} → ${prods.join(' | ')}`).join('<br/>')}
+      `;
+    };
+  }
+
+  // Convert to PDA logic
+  const convertBtn = document.getElementById('convert-btn');
+  if (convertBtn && input) {
+    convertBtn.onclick = () => {
+      const lines = input.value.trim().split('\n').filter(Boolean);
+      const productions = {};
+      let variables = new Set();
+      let terminals = new Set();
+      let startVariable = null;
+      for (const line of lines) {
+        const [left, right] = line.split('→').map(s => s.trim());
+        if (!left || !right) continue;
+        if (!startVariable) startVariable = left;
+        variables.add(left);
+        productions[left] = right.split('|').map(r => r.trim());
+        for (const prod of productions[left]) {
+          for (const ch of prod) {
+            if (ch >= 'A' && ch <= 'Z') variables.add(ch);
+            else if (ch !== 'ε') terminals.add(ch);
+          }
+        }
+      }
+      if (!startVariable) {
+        document.getElementById('dfa-graph-vis').innerHTML = '<div style="color:red">Invalid CFG input.</div>';
+        return;
+      }
+      // Basic CFG to PDA construction (single state, stack-based)
+      // States: q
+      // Stack alphabet: variables + terminals + Z
+      // Initial stack: Z, then push start variable
+      // Transitions:
+      // 1. (q, ε, Z) → (q, S Z)
+      // 2. For each production A → α: (q, ε, A) → (q, α)
+      // 3. For each terminal a: (q, a, a) → (q, ε)
+      const state = 'q';
+      const stackStart = 'Z';
+      const stackAlphabet = new Set([...variables, ...terminals, stackStart]);
+      const transitions = {
+        [state]: {}
+      };
+      // 1. (q, ε, Z) → (q, S Z)
+      transitions[state][`ε,${stackStart}`] = [{ to: state, push: `${startVariable}${stackStart}` }];
+      // 2. For each production A → α: (q, ε, A) → (q, α)
+      for (const A of variables) {
+        for (const prod of productions[A] || []) {
+          const pushStr = prod === 'ε' ? '' : prod;
+          if (!transitions[state][`ε,${A}`]) transitions[state][`ε,${A}`] = [];
+          transitions[state][`ε,${A}`].push({ to: state, push: pushStr });
+        }
+      }
+      // 3. For each terminal a: (q, a, a) → (q, ε)
+      for (const a of terminals) {
+        if (!transitions[state][`${a},${a}`]) transitions[state][`${a},${a}`] = [];
+        transitions[state][`${a},${a}`].push({ to: state, push: '' });
+      }
+      // PDA object
+      const pda = {
+        states: [state],
+        inputAlphabet: Array.from(terminals),
+        stackAlphabet: Array.from(stackAlphabet),
+        initialState: state,
+        finalStates: [state],
+        transitions
+      };
+      // Render PDA as a graph (as much as possible)
+      try {
+        new VisGraphRenderer('dfa-graph-vis').renderAutomaton(pda, 'nfa');
+      } catch (e) {
+        document.getElementById('dfa-graph-vis').innerHTML = '<div style="color:red">Cannot render PDA as graph.</div>';
+      }
+    };
+  }
+  const examplesDiv = document.getElementById('examples-content');
+  if (!examplesDiv || !window.solvedExamples) return;
+  // Only show CFG→PDA examples
+  const examples = window.solvedExamples.filter(ex => ex.cfg && ex.pda);
+  if (examples.length === 0) {
+    examplesDiv.innerHTML = '<div style="color:#888">No solved examples available.</div>';
+    return;
+  }
+  examplesDiv.innerHTML = examples.map((ex, i) =>
+    `<button class="btn-secondary example-btn" data-idx="${i}">${ex.title}</button>`
+  ).join(' ');
+  examplesDiv.querySelectorAll('.example-btn').forEach(btn => {
+    btn.onclick = () => {
+      const idx = btn.getAttribute('data-idx');
+      const ex = examples[idx];
+      // Show CFG as formatted text in parsed-cfg-output
+      const parsedOutput = document.getElementById('parsed-cfg-output');
+      if (parsedOutput && ex.cfg) {
+        let cfgText = `<b>Variables:</b> ${ex.cfg.variables.join(', ')}<br/><b>Terminals:</b> ${ex.cfg.terminals.join(', ')}<br/><b>Start:</b> ${ex.cfg.startVariable}<br/><b>Productions:</b><br/>`;
+        for (const v in ex.cfg.productions) {
+          cfgText += `${v} → ${ex.cfg.productions[v].join(' | ')}<br/>`;
+        }
+        parsedOutput.innerHTML = cfgText;
+      }
+      // Clear nfa-graph-vis (no CFG graph)
+      document.getElementById('nfa-graph-vis').innerHTML = '';
+      // Render PDA as NFA graph (if possible)
+      if (ex.pda) {
+        try {
+          new VisGraphRenderer('dfa-graph-vis').renderAutomaton(ex.pda, 'nfa');
+        } catch (e) {
+          document.getElementById('dfa-graph-vis').innerHTML = '<div style="color:red">Cannot render PDA as graph.</div>';
+        }
+      } else {
+        document.getElementById('dfa-graph-vis').innerHTML = '<div style="color:#888">No PDA to display.</div>';
+      }
+      document.getElementById('steps-content').innerHTML = ex.steps.map(s => `<div class='step'>${s}</div>`).join('');
+    };
+  });
+});
+</script>
+</html> 
