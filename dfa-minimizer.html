@@ -26,7 +26,7 @@
         </a>
       </li>
       <li>
-        <a href="enfa-to-nfa.html" class="nav-item-link">
+        <a href="enfa-to-dfa.html" class="nav-item-link">
           <span class="nav-label">ε-NFA</span>
           <span class="nav-arrow">→</span>
           <span class="nav-label">DFA</span>
@@ -54,7 +54,7 @@
         </a>
       </li>
       <li><a href="pda-to-cfg.html">PDA → CFG</a></li>
-      <li><a href="cfg-to-pda.html">CFG → PDA</a></li>
+      <li><a href="cfl-to-cfg.html">CFL → CFG</a></li>
       <li><a href="tm-to-fa.html">TM → FA</a></li>
       <li><a href="dfa-minimizer.html" class="active">DFA Minimizer</a></li>
     </ul>
@@ -110,7 +110,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const examplesDiv = document.getElementById('examples-content');
   if (!examplesDiv || !window.solvedExamples) return;
   // Only show DFA Minimizer examples
-  const examples = window.solvedExamples.filter(ex => ex.dfa && ex.minimizedDfa);
+  const examples = window.solvedExamples.filter(ex => ex.dfa && ex.minDfa);
   if (examples.length === 0) {
     examplesDiv.innerHTML = '<div style="color:#888">No solved examples available.</div>';
     return;
@@ -133,9 +133,9 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('nfa-graph-vis').innerHTML = '<div style="color:#888">No DFA to display.</div>';
       }
       // Render minimized DFA as DFA graph
-      if (ex.minimizedDfa) {
+      if (ex.minDfa) {
         try {
-          new VisGraphRenderer('dfa-graph-vis').renderAutomaton(ex.minimizedDfa, 'dfa');
+          new VisGraphRenderer('dfa-graph-vis').renderAutomaton(ex.minDfa, 'dfa');
         } catch (e) {
           document.getElementById('dfa-graph-vis').innerHTML = '<div style="color:red">Cannot render minimized DFA as graph.</div>';
         }

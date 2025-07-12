@@ -11,6 +11,70 @@ function simplifyRegexForNFA(regex) {
 // Thompson's construction for basic regex (a|b, ab, a*, etc.)
 function regexToNFA(regex) {
   regex = simplifyRegexForNFA(regex);
+  // Compact construction for simple patterns
+  if (/^[a-zA-Z0-9]$/.test(regex)) {
+    // Single symbol: a
+    return {
+      states: ['q0', 'q1'],
+      alphabet: [regex],
+      initialState: 'q0',
+      finalStates: ['q1'],
+      transitions: { 'q0': { [regex]: ['q1'] }, 'q1': {} }
+    };
+  }
+  if (/^[a-zA-Z0-9]\*$/.test(regex)) {
+    // a*
+    const sym = regex[0];
+    return {
+      states: ['q0'],
+      alphabet: [sym],
+      initialState: 'q0',
+      finalStates: ['q0'],
+      transitions: { 'q0': { [sym]: ['q0'] } }
+    };
+  }
+  if (/^[a-zA-Z0-9]\+$/.test(regex)) {
+    // a+
+    const sym = regex[0];
+    return {
+      states: ['q0', 'q1'],
+      alphabet: [sym],
+      initialState: 'q0',
+      finalStates: ['q1'],
+      transitions: { 'q0': { [sym]: ['q1'] }, 'q1': { [sym]: ['q1'] } }
+    };
+  }
+  if (/^[a-zA-Z0-9]{2}$/.test(regex)) {
+    // ab
+    const s1 = regex[0], s2 = regex[1];
+    return {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: [s1, s2],
+      initialState: 'q0',
+      finalStates: ['q2'],
+      transitions: { 'q0': { [s1]: ['q1'] }, 'q1': { [s2]: ['q2'] }, 'q2': {} }
+    };
+  }
+  // Special case: (a|b|c...)* (robust to spaces)
+  const matchStarUnion = /^\(\s*([a-zA-Z0-9](\s*\|\s*[a-zA-Z0-9])*)\s*\)\*$/;
+  const starUnion = regex.replace(/\s+/g, '').match(/^\(([a-zA-Z0-9](\|[a-zA-Z0-9])*)\)\*$/);
+  if (starUnion) {
+    // Extract symbols from inside the parentheses
+    const syms = starUnion[1].split('|');
+    const alphabet = Array.from(new Set(syms));
+    const transitions = { 'q0': {} };
+    for (const sym of alphabet) {
+      transitions['q0'][sym] = ['q0'];
+    }
+    return {
+      states: ['q0'],
+      alphabet,
+      initialState: 'q0',
+      finalStates: ['q0'],
+      transitions
+    };
+  }
+  // Otherwise, use Thompson's construction
   let stateCount = 0;
   function newState() { return 'q' + (stateCount++); }
 

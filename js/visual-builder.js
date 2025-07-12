@@ -188,4 +188,143 @@ class VisualNFABuilder {
 // Initialize builder on DOMContentLoaded
 window.addEventListener('DOMContentLoaded', () => {
   new VisualNFABuilder('nfa-graph-vis');
+
+  // TM transition modal logic (only on TM to FA page)
+  if (window.location.pathname.includes('tm-to-fa.html')) {
+    const addTransBtn = document.getElementById('add-transition');
+    const modal = document.getElementById('tm-transition-modal');
+    const fromInput = document.getElementById('tm-from-state');
+    const readInput = document.getElementById('tm-read');
+    const writeInput = document.getElementById('tm-write');
+    const moveInput = document.getElementById('tm-move');
+    const toInput = document.getElementById('tm-to-state');
+    const confirmBtn = document.getElementById('tm-add-transition-confirm');
+    const cancelBtn = document.getElementById('tm-add-transition-cancel');
+    if (addTransBtn && modal && fromInput && readInput && writeInput && moveInput && toInput && confirmBtn && cancelBtn) {
+      addTransBtn.onclick = () => {
+        fromInput.value = '';
+        readInput.value = '';
+        writeInput.value = '';
+        moveInput.value = 'R';
+        toInput.value = '';
+        modal.style.display = 'flex';
+      };
+      cancelBtn.onclick = () => {
+        modal.style.display = 'none';
+      };
+      confirmBtn.onclick = () => {
+        const from = fromInput.value.trim();
+        const read = readInput.value.trim();
+        const write = writeInput.value.trim();
+        const move = moveInput.value;
+        const to = toInput.value.trim();
+        if (!from || !to) {
+          alert('Please enter both from and to states.');
+          return;
+        }
+        // Add states if missing
+        const builder = window.visualNFABuilder;
+        if (!builder.nfa.states.includes(from)) builder.nfa.states.push(from);
+        if (!builder.nfa.states.includes(to)) builder.nfa.states.push(to);
+        // Add transition
+        if (!builder.nfa.transitions[from]) builder.nfa.transitions[from] = {};
+        const key = read;
+        if (!builder.nfa.transitions[from][key]) builder.nfa.transitions[from][key] = [];
+        builder.nfa.transitions[from][key].push({ to, write, move });
+        builder.render();
+        modal.style.display = 'none';
+      };
+    }
+
+    // Tape simulation state
+    let tape = [];
+    let head = 0;
+    let tmState = null;
+    let halted = false;
+    let tapeInput = '';
+    let tmBuilder = window.visualNFABuilder;
+
+    // Helper: update tape visualization
+    function updateTapeViz() {
+      const tapeDiv = document.getElementById('tm-tape-visualization');
+      if (!tapeDiv) return;
+      let html = '<div style="display:inline-flex; align-items:center; gap:2px;">';
+      for (let i = 0; i < tape.length; ++i) {
+        const isHead = i === head;
+        html += `<div style="padding:0.5rem 0.7rem; border-radius:0.4rem; background:${isHead ? '#f59e42' : '#22223b'}; color:#fff; border:2px solid ${isHead ? '#fff' : '#6366f1'}; font-weight:bold; font-size:1.2rem; position:relative;">${tape[i] || 'B'}${isHead ? `<div style='position:absolute;top:100%;left:50%;transform:translateX(-50%);font-size:0.9rem;color:#fff;'>▼</div>` : ''}</div>`;
+      }
+      html += '</div>';
+      html += `<div style='margin-top:0.7rem; color:#fff; font-size:1.1rem;'>Current State: <b>${tmState || ''}</b> ${halted ? '<span style="color:#f87171;">[HALTED]</span>' : ''}</div>`;
+      tapeDiv.innerHTML = html;
+    }
+
+    // Helper: reset tape
+    function resetTape() {
+      const inputBox = document.getElementById('tm-tape-input');
+      tapeInput = (inputBox && inputBox.value) ? inputBox.value : '';
+      tape = tapeInput.split('');
+      if (tape.length === 0) tape = ['B'];
+      head = 0;
+      tmState = tmBuilder.nfa.initialState || (tmBuilder.nfa.states[0] || 'q0');
+      halted = false;
+      updateTapeViz();
+    }
+
+    // Step simulation
+    function tmStep() {
+      if (halted) return;
+      const currState = tmState;
+      const currSymbol = tape[head] || 'B';
+      const transitions = tmBuilder.nfa.transitions[currState] || {};
+      const options = transitions[currSymbol] || transitions[''] || [];
+      if (!options.length) {
+        halted = true;
+        updateTapeViz();
+        return;
+      }
+      // Use the first available transition
+      const t = options[0];
+      // Write
+      tape[head] = t.write || currSymbol;
+      // Move
+      if (t.move === 'R') {
+        head++;
+        if (head >= tape.length) tape.push('B');
+      } else if (t.move === 'L') {
+        head--;
+        if (head < 0) {
+          tape.unshift('B');
+          head = 0;
+        }
+      }
+      // State
+      tmState = t.to;
+      // Halt if in final state
+      if (tmBuilder.nfa.finalStates && tmBuilder.nfa.finalStates.includes(tmState)) {
+        halted = true;
+      }
+      updateTapeViz();
+    }
+
+    // Run simulation
+    function tmRun() {
+      let steps = 0;
+      while (!halted && steps < 1000) {
+        tmStep();
+        steps++;
+      }
+    }
+
+    // Wire up buttons
+    const stepBtn = document.getElementById('tm-step-btn');
+    const runBtn = document.getElementById('tm-run-btn');
+    const resetBtn = document.getElementById('tm-reset-tape-btn');
+    if (stepBtn) stepBtn.onclick = tmStep;
+    if (runBtn) runBtn.onclick = tmRun;
+    if (resetBtn) resetBtn.onclick = resetTape;
+    // Reset tape on page load and when tape input changes
+    resetTape();
+    const tapeInputBox = document.getElementById('tm-tape-input');
+    if (tapeInputBox) tapeInputBox.onchange = resetTape;
+  }
 }); 

@@ -26,7 +26,7 @@
         </a>
       </li>
       <li>
-        <a href="enfa-to-nfa.html" class="nav-item-link">
+        <a href="enfa-to-dfa.html" class="nav-item-link">
           <span class="nav-label">ε-NFA</span>
           <span class="nav-arrow">→</span>
           <span class="nav-label">DFA</span>
@@ -103,28 +103,117 @@
 </body>
 <script>
 window.addEventListener('DOMContentLoaded', () => {
-  // CFL input parsing logic
+  // CFG input parsing logic
   const input = document.getElementById('cfl-input');
   const parseBtn = document.getElementById('infer-cfg-btn');
   const output = document.getElementById('parsed-cfg-output');
   if (input && parseBtn && output) {
     parseBtn.onclick = () => {
-      output.innerHTML = '<div style="color:#888">(CFG inference from CFL description is not implemented. See solved examples below.)</div>';
+      output.innerHTML = '';
+      const lines = input.value.trim().split('\n').filter(Boolean);
+      const productions = {};
+      let variables = new Set();
+      let terminals = new Set();
+      let startVariable = null;
+      for (const line of lines) {
+        const [left, right] = line.split('→').map(s => s.trim());
+        if (!left || !right) continue;
+        if (!startVariable) startVariable = left;
+        variables.add(left);
+        productions[left] = right.split('|').map(r => r.trim());
+        for (const prod of productions[left]) {
+          for (const ch of prod) {
+            if (ch >= 'A' && ch <= 'Z') variables.add(ch);
+            else if (ch !== 'ε') terminals.add(ch);
+          }
+        }
+      }
+      output.innerHTML = `
+        <b>Variables:</b> ${Array.from(variables).join(', ')}<br/>
+        <b>Terminals:</b> ${Array.from(terminals).join(', ')}<br/>
+        <b>Start:</b> ${startVariable}<br/>
+        <b>Productions:</b><br/>
+        ${Object.entries(productions).map(([v, prods]) => `${v} → ${prods.join(' | ')}`).join('<br/>')}
+      `;
     };
   }
 
-  // Convert to CFG logic (placeholder)
+  // Convert to PDA logic
   const convertBtn = document.getElementById('convert-btn');
   if (convertBtn && input) {
     convertBtn.onclick = () => {
-      output.innerHTML = '<div style="color:#888">(CFG inference from CFL description is not implemented. See solved examples below.)</div>';
+      const lines = input.value.trim().split('\n').filter(Boolean);
+      const productions = {};
+      let variables = new Set();
+      let terminals = new Set();
+      let startVariable = null;
+      for (const line of lines) {
+        const [left, right] = line.split('→').map(s => s.trim());
+        if (!left || !right) continue;
+        if (!startVariable) startVariable = left;
+        variables.add(left);
+        productions[left] = right.split('|').map(r => r.trim());
+        for (const prod of productions[left]) {
+          for (const ch of prod) {
+            if (ch >= 'A' && ch <= 'Z') variables.add(ch);
+            else if (ch !== 'ε') terminals.add(ch);
+          }
+        }
+      }
+      if (!startVariable) {
+        document.getElementById('dfa-graph-vis').innerHTML = '<div style="color:red">Invalid CFG input.</div>';
+        return;
+      }
+      // Basic CFG to PDA construction (single state, stack-based)
+      // States: q
+      // Stack alphabet: variables + terminals + Z
+      // Initial stack: Z, then push start variable
+      // Transitions:
+      // 1. (q, ε, Z) → (q, S Z)
+      // 2. For each production A → α: (q, ε, A) → (q, α)
+      // 3. For each terminal a: (q, a, a) → (q, ε)
+      const state = 'q';
+      const stackStart = 'Z';
+      const stackAlphabet = new Set([...variables, ...terminals, stackStart]);
+      const transitions = {
+        [state]: {}
+      };
+      // 1. (q, ε, Z) → (q, S Z)
+      transitions[state][`ε,${stackStart}`] = [{ to: state, push: `${startVariable}${stackStart}` }];
+      // 2. For each production A → α: (q, ε, A) → (q, α)
+      for (const A of variables) {
+        for (const prod of productions[A] || []) {
+          const pushStr = prod === 'ε' ? '' : prod;
+          if (!transitions[state][`ε,${A}`]) transitions[state][`ε,${A}`] = [];
+          transitions[state][`ε,${A}`].push({ to: state, push: pushStr });
+        }
+      }
+      // 3. For each terminal a: (q, a, a) → (q, ε)
+      for (const a of terminals) {
+        if (!transitions[state][`${a},${a}`]) transitions[state][`${a},${a}`] = [];
+        transitions[state][`${a},${a}`].push({ to: state, push: '' });
+      }
+      // PDA object
+      const pda = {
+        states: [state],
+        inputAlphabet: Array.from(terminals),
+        stackAlphabet: Array.from(stackAlphabet),
+        initialState: state,
+        finalStates: [state],
+        transitions
+      };
+      // Render PDA as a graph (as much as possible)
+      try {
+        new VisGraphRenderer('dfa-graph-vis').renderAutomaton(pda, 'nfa');
+      } catch (e) {
+        document.getElementById('dfa-graph-vis').innerHTML = '<div style="color:red">Cannot render PDA as graph.</div>';
+      }
     };
   }
-
-  // Solved Examples: Only show CFL→CFG examples
   const examplesDiv = document.getElementById('examples-content');
   if (!examplesDiv || !window.solvedExamples) return;
-  const examples = window.solvedExamples.filter(ex => ex.cflDescription && ex.cfg);
+  // Only show CFL→CFG examples
+  const examples = window.solvedExamples.filter(ex => ex.cfl && ex.cfg);
   if (examples.length === 0) {
     examplesDiv.innerHTML = '<div style="color:#888">No solved examples available.</div>';
     return;
@@ -136,15 +225,60 @@ window.addEventListener('DOMContentLoaded', () => {
     btn.onclick = () => {
       const idx = btn.getAttribute('data-idx');
       const ex = examples[idx];
-      // Show CFL description
-      let cflText = `<div style='margin-bottom:1rem;'><b>CFL Description:</b> ${ex.cflDescription}</div>`;
-      // Show CFG as formatted, centered text
-      let cfgText = `<div style='display:inline-block; text-align:left; font-size:1.1rem;'><b>Variables:</b> ${ex.cfg.variables.join(', ')}<br/><b>Terminals:</b> ${ex.cfg.terminals.join(', ')}<br/><b>Start:</b> ${ex.cfg.startVariable}<br/><b>Productions:</b><br/>`;
-      for (const v in ex.cfg.productions) {
-        cfgText += `${v} → ${ex.cfg.productions[v].join(' | ')}<br/>`;
+      // Show CFL description and CFG as formatted text
+      const parsedOutput = document.getElementById('parsed-cfg-output');
+      if (parsedOutput && ex.cfg) {
+        let cfgText = `<div style='margin-bottom:0.5rem;'><b>CFL Description:</b> ${ex.cflDescription}</div>`;
+        cfgText += `<b>Variables:</b> ${ex.cfg.variables.join(', ')}<br/><b>Terminals:</b> ${ex.cfg.terminals.join(', ')}<br/><b>Start:</b> ${ex.cfg.startVariable}<br/><b>Productions:</b><br/>`;
+        for (const v in ex.cfg.productions) {
+          cfgText += `${v} → ${ex.cfg.productions[v].join(' | ')}<br/>`;
+        }
+        parsedOutput.innerHTML = cfgText;
       }
-      cfgText += '</div>';
-      document.getElementById('dfa-graph-vis').innerHTML = cflText + cfgText;
+      // Render a basic CFG graph in dfa-graph-vis
+      const graphDiv = document.getElementById('dfa-graph-vis');
+      if (graphDiv && ex.cfg && ex.cfg.productions && Object.keys(ex.cfg.productions).length > 0) {
+        // Build nodes and edges
+        const nodes = [];
+        const edges = [];
+        const varSet = new Set(ex.cfg.variables);
+        const termSet = new Set(ex.cfg.terminals);
+        // Add variable nodes
+        ex.cfg.variables.forEach(v => {
+          nodes.push({ id: v, label: v, shape: 'ellipse', color: '#6366f1', font: { color: '#fff' } });
+        });
+        // Add terminal nodes (as leaf nodes)
+        ex.cfg.terminals.forEach(t => {
+          nodes.push({ id: `t_${t}`, label: t, shape: 'box', color: '#f59e42', font: { color: '#fff' } });
+        });
+        // Add edges for productions
+        for (const from in ex.cfg.productions) {
+          for (const prod of ex.cfg.productions[from]) {
+            if (prod === '') continue; // epsilon
+            for (const sym of prod) {
+              if (varSet.has(sym)) {
+                edges.push({ from, to: sym, arrows: 'to', label: '', color: '#fff' });
+              } else if (termSet.has(sym)) {
+                edges.push({ from, to: `t_${sym}`, arrows: 'to', label: '', color: '#fff' });
+              }
+            }
+          }
+        }
+        // Render with Vis.js
+        const data = { nodes, edges };
+        const options = {
+          layout: { hierarchical: { enabled: false } },
+          physics: { enabled: true },
+          interaction: { dragNodes: true, hover: true, zoomView: true, tooltipDelay: 100 },
+        };
+        graphDiv.innerHTML = '';
+        new vis.Network(graphDiv, data, options);
+      } else if (graphDiv) {
+        graphDiv.innerHTML = '';
+      }
+      // Clear nfa-graph-vis if present
+      const nfaGraph = document.getElementById('nfa-graph-vis');
+      if (nfaGraph) nfaGraph.innerHTML = '';
       // Show steps
       document.getElementById('steps-content').innerHTML = ex.steps.map(s => `<div class='step'>${s}</div>`).join('');
     };

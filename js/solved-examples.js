@@ -225,256 +225,230 @@ window.solvedExamples = [
   },
   // TOA→FA Example 1
   {
-    title: 'TOA → FA: Simple Example',
+    title: 'TOA → FA: accepts a*',
     toa: {
-      states: ['s', 'q', 'd'],
-      alphabet: ['a', 'b'],
-      initialState: 's',
-      finalStates: ['d'],
+      states: ['q0'],
+      alphabet: ['a'],
+      initialState: 'q0',
+      finalStates: ['q0'],
       transitions: {
-        's': { 'a': ['q'], 'b': ['s'] },
-        'q': { 'a': ['q'], 'b': ['d'] },
-        'd': {}
+        'q0': { 'a': ['q0'] }
       }
     },
     fa: {
-      states: ['S', 'Q', 'D'],
-      alphabet: ['a', 'b'],
-      initialState: 'S',
-      finalStates: ['D'],
+      states: ['Q0'],
+      alphabet: ['a'],
+      initialState: 'Q0',
+      finalStates: ['Q0'],
       transitions: {
-        'S': { 'a': ['Q'], 'b': ['S'] },
-        'Q': { 'a': ['Q'], 'b': ['D'] },
-        'D': {}
+        'Q0': { 'a': 'Q0' }
       }
     },
     steps: [
-      'Start with TOA: states {s, q, d}, initial state s, final state d.',
-      'Transition: s --a--> q, s --b--> s, q --a--> q, q --b--> d.',
-      'Rename states for FA: s→S, q→Q, d→D.',
-      'Resulting FA: S --a--> Q, S --b--> S, Q --a--> Q, Q --b--> D, D is final.'
+      'Subset construction for a single state TOA with self-loop on a.',
+      'FA is identical to TOA.'
     ]
   },
   // TOA→FA Example 2
   {
-    title: 'TOA → FA: Looping State',
+    title: 'TOA → FA: accepts ab',
     toa: {
-      states: ['p', 'q'],
-      alphabet: ['a'],
-      initialState: 'p',
-      finalStates: ['q'],
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q2'],
       transitions: {
-        'p': { 'a': ['p', 'q'] },
-        'q': { 'a': ['q'] }
+        'q0': { 'a': ['q1'] },
+        'q1': { 'b': ['q2'] },
+        'q2': {}
       }
     },
     fa: {
-      states: ['P', 'Q'],
-      alphabet: ['a'],
-      initialState: 'P',
-      finalStates: ['Q'],
+      states: ['Q0', 'Q1', 'Q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q2'],
       transitions: {
-        'P': { 'a': ['P', 'Q'] },
-        'Q': { 'a': ['Q'] }
+        'Q0': { 'a': 'Q1', 'b': 'Q2' },
+        'Q1': { 'a': 'Q1', 'b': 'Q2' },
+        'Q2': { 'a': 'Q1', 'b': 'Q2' }
       }
     },
     steps: [
-      'Start with TOA: states {p, q}, initial state p, final state q.',
-      'Transitions: p --a--> p, p --a--> q, q --a--> q.',
-      'Rename states for FA: p→P, q→Q.',
-      'Resulting FA: P --a--> P, P --a--> Q, Q --a--> Q. Q is final.'
+      'Subset construction for TOA accepting ab.',
+      'FA has a chain of three states.'
     ]
   },
   // TOA→FA Example 3
   {
-    title: 'TOA → FA: Dead State',
+    title: 'TOA → FA: accepts a+b',
     toa: {
-      states: ['s', 'd'],
+      states: ['q0', 'q1', 'q2'],
       alphabet: ['a', 'b'],
-      initialState: 's',
-      finalStates: ['d'],
+      initialState: 'q0',
+      finalStates: ['q2'],
       transitions: {
-        's': { 'a': ['s'], 'b': ['d'] },
-        'd': { 'a': ['d'], 'b': ['d'] }
+        'q0': { 'a': ['q1'], 'b': ['q2'] },
+        'q1': {},
+        'q2': {}
       }
     },
     fa: {
-      states: ['S', 'D'],
+      states: ['Q0', 'Q1', 'Q2'],
       alphabet: ['a', 'b'],
-      initialState: 'S',
-      finalStates: ['D'],
+      initialState: 'Q0',
+      finalStates: ['Q1', 'Q2'],
       transitions: {
-        'S': { 'a': ['S'], 'b': ['D'] },
-        'D': { 'a': ['D'], 'b': ['D'] }
+        'Q0': { 'a': 'Q1', 'b': 'Q2' },
+        'Q1': { 'a': 'Q1', 'b': 'Q2' },
+        'Q2': { 'a': 'Q1', 'b': 'Q2' }
       }
     },
     steps: [
-      'Start with TOA: states {s, d}, initial state s, final state d.',
-      'Transitions: s --a--> s, s --b--> d, d --a--> d, d --b--> d.',
-      'Rename states for FA: s→S, d→D.',
-      'Resulting FA: S --a--> S, S --b--> D, D --a--> D, D --b--> D. D is final.'
+      'Subset construction for TOA accepting a or b.',
+      'FA has two final states.'
     ]
   },
   // TOA→FA Example 4
   {
-    title: 'TOA → FA: Branching',
+    title: 'TOA → FA: accepts (ab)*',
     toa: {
-      states: ['x', 'y', 'z'],
-      alphabet: ['0', '1'],
-      initialState: 'x',
-      finalStates: ['z'],
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q0'],
       transitions: {
-        'x': { '0': ['y'], '1': ['z'] },
-        'y': { '1': ['z'] },
-        'z': {}
+        'q0': { 'a': ['q1'] },
+        'q1': { 'b': ['q0'] },
+        'q2': {}
       }
     },
     fa: {
-      states: ['X', 'Y', 'Z'],
-      alphabet: ['0', '1'],
-      initialState: 'X',
-      finalStates: ['Z'],
+      states: ['Q0', 'Q1'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q0'],
       transitions: {
-        'X': { '0': ['Y'], '1': ['Z'] },
-        'Y': { '1': ['Z'] },
-        'Z': {}
+        'Q0': { 'a': 'Q1', 'b': 'Q0' },
+        'Q1': { 'a': 'Q1', 'b': 'Q0' }
       }
     },
     steps: [
-      'Start with TOA: states {x, y, z}, initial state x, final state z.',
-      'Transitions: x --0--> y, x --1--> z, y --1--> z.',
-      'Rename states for FA: x→X, y→Y, z→Z.',
-      'Resulting FA: X --0--> Y, X --1--> Z, Y --1--> Z. Z is final.'
+      'Subset construction for TOA accepting (ab)*.',
+      'FA cycles between two states.'
     ]
   },
   // TOA→FA Example 5
   {
-    title: 'TOA → FA: Multiple Finals',
+    title: 'TOA → FA: accepts a*b*',
     toa: {
-      states: ['a', 'b', 'c'],
-      alphabet: ['x', 'y'],
-      initialState: 'a',
-      finalStates: ['b', 'c'],
+      states: ['q0', 'q1'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q1'],
       transitions: {
-        'a': { 'x': ['b'], 'y': ['c'] },
-        'b': { 'x': ['b'], 'y': ['c'] },
-        'c': { 'x': ['c'], 'y': ['c'] }
+        'q0': { 'a': ['q0'], 'b': ['q1'] },
+        'q1': { 'b': ['q1'] }
       }
     },
     fa: {
-      states: ['A', 'B', 'C'],
-      alphabet: ['x', 'y'],
-      initialState: 'A',
-      finalStates: ['B', 'C'],
+      states: ['Q0', 'Q1'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q1'],
       transitions: {
-        'A': { 'x': ['B'], 'y': ['C'] },
-        'B': { 'x': ['B'], 'y': ['C'] },
-        'C': { 'x': ['C'], 'y': ['C'] }
+        'Q0': { 'a': 'Q0', 'b': 'Q1' },
+        'Q1': { 'a': 'Q0', 'b': 'Q1' }
       }
     },
     steps: [
-      'Start with TOA: states {a, b, c}, initial state a, final states b, c.',
-      'Transitions: a --x--> b, a --y--> c, b --x--> b, b --y--> c, c --x--> c, c --y--> c.',
-      'Rename states for FA: a→A, b→B, c→C.',
-      'Resulting FA: A --x--> B, A --y--> C, B --x--> B, B --y--> C, C --x--> C, C --y--> C. B and C are final.'
+      'Subset construction for TOA accepting a*b*.',
+      'FA has two states, Q0 and Q1.'
     ]
   },
   // PDA→CFG Example 1
   {
-    title: 'PDA → CFG: a^n b^n',
+    title: 'PDA → CFG: accepts a*',
     pda: {
-      states: ['q0', 'q1', 'qf'],
-      alphabet: ['a', 'b'],
-      stackAlphabet: ['Z', 'A'],
+      states: ['q0'],
+      alphabet: ['a'],
+      stackAlphabet: ['#'],
       initialState: 'q0',
-      finalStates: ['qf'],
+      finalStates: ['q0'],
       transitions: {
         'q0': {
-          'a,Z': [{ to: 'q0', push: 'AZ' }],
-          'a,A': [{ to: 'q0', push: 'AA' }],
-          'b,A': [{ to: 'q1', push: '' }]
-        },
-        'q1': {
-          'b,A': [{ to: 'q1', push: '' }],
-          '': [{ to: 'qf', push: '' }]
+          'a,#': [{ to: 'q0', push: '#' }],
+          'ε,#': [{ to: 'q0', push: '#' }]
         }
       }
     },
     cfg: {
       variables: ['S'],
-      terminals: ['a', 'b'],
+      terminals: ['a'],
       startVariable: 'S',
       productions: {
-        'S': ['aSb', '']
+        'S': ['aS', 'a']
       }
     },
     steps: [
-      'PDA pushes A for each a, pops A for each b.',
-      'Accepts equal number of a and b.',
-      'CFG: S → aSb | ε.'
+      'PDA accepts a* by pushing #, reading a, popping #, and pushing #.',
+      'CFG generates a* by S -> aS -> aS -> ... -> a^nS -> a^n'
     ]
   },
   // PDA→CFG Example 2
   {
-    title: 'PDA → CFG: a^n b^n c^n',
+    title: 'PDA → CFG: accepts a*b*',
     pda: {
-      states: ['q0', 'q1', 'q2', 'qf'],
-      alphabet: ['a', 'b', 'c'],
-      stackAlphabet: ['Z', 'A', 'B'],
+      states: ['q0', 'q1'],
+      alphabet: ['a', 'b'],
+      stackAlphabet: ['#'],
       initialState: 'q0',
-      finalStates: ['qf'],
+      finalStates: ['q1'],
       transitions: {
         'q0': {
-          'a,Z': [{ to: 'q0', push: 'AZ' }],
-          'a,A': [{ to: 'q0', push: 'AA' }],
-          'b,A': [{ to: 'q1', push: 'A' }]
+          'a,#': [{ to: 'q0', push: '#' }],
+          'ε,#': [{ to: 'q1', push: '#' }]
         },
         'q1': {
-          'b,A': [{ to: 'q1', push: 'A' }],
-          'c,A': [{ to: 'q2', push: '' }]
-        },
-        'q2': {
-          'c,A': [{ to: 'q2', push: '' }],
-          '': [{ to: 'qf', push: '' }]
+          'b,#': [{ to: 'q1', push: '#' }],
+          'ε,#': [{ to: 'q1', push: '#' }]
         }
       }
     },
     cfg: {
       variables: ['S'],
-      terminals: ['a', 'b', 'c'],
+      terminals: ['a', 'b'],
       startVariable: 'S',
       productions: {
-        'S': ['aSbSc', '']
+        'S': ['aS', 'bS', 'a', 'b']
       }
     },
     steps: [
-      'PDA pushes A for each a, for each b pushes A, for each c pops A.',
-      'Accepts equal number of a, b, c in order.',
-      'CFG: S → aSbSc | ε.'
+      'PDA accepts a*b* by pushing #, reading a, popping #, pushing #, reading b, popping #, pushing #.',
+      'CFG generates a*b* by S -> aS -> aS -> ... -> a^nS -> a^n -> bS -> bS -> ... -> b^mS -> b^m'
     ]
   },
   // PDA→CFG Example 3
   {
-    title: 'PDA → CFG: Palindrome over {a, b}',
+    title: 'PDA → CFG: accepts a^n b^n',
     pda: {
-      states: ['q0', 'q1', 'qf'],
+      states: ['q0', 'q1', 'q2'],
       alphabet: ['a', 'b'],
-      stackAlphabet: ['Z', 'A', 'B'],
+      stackAlphabet: ['Z', 'A'],
       initialState: 'q0',
-      finalStates: ['qf'],
+      finalStates: ['q2'],
       transitions: {
         'q0': {
           'a,Z': [{ to: 'q0', push: 'AZ' }],
-          'b,Z': [{ to: 'q0', push: 'BZ' }],
           'a,A': [{ to: 'q0', push: 'AA' }],
-          'b,B': [{ to: 'q0', push: 'BB' }],
-          '': [{ to: 'q1', push: '' }]
+          'ε,Z': [{ to: 'q1', push: 'Z' }],
+          'ε,A': [{ to: 'q1', push: 'A' }]
         },
         'q1': {
-          'a,A': [{ to: 'q1', push: '' }],
-          'b,B': [{ to: 'q1', push: '' }],
-          '': [{ to: 'qf', push: '' }]
-        }
+          'b,A': [{ to: 'q1', push: '' }],
+          'ε,Z': [{ to: 'q2', push: 'Z' }]
+        },
+        'q2': {}
       }
     },
     cfg: {
@@ -482,175 +456,943 @@ window.solvedExamples = [
       terminals: ['a', 'b'],
       startVariable: 'S',
       productions: {
-        'S': ['aSa', 'bSb', 'a', 'b', '']
+        'S': ['aSb', 'ε']
       }
     },
     steps: [
-      'PDA pushes A for a, B for b, then pops matching symbols.',
-      'Accepts palindromes over {a, b}.',
-      'CFG: S → aSa | bSb | a | b | ε.'
+      'PDA pushes A for each a, pops for each b.',
+      'CFG generates a^n b^n.'
     ]
   },
   // PDA→CFG Example 4
   {
-    title: 'PDA → CFG: Even length',
+    title: 'PDA → CFG: accepts palindromes over {a, b}',
     pda: {
-      states: ['q0', 'q1', 'qf'],
+      states: ['q0', 'q1', 'q2'],
       alphabet: ['a', 'b'],
-      stackAlphabet: ['Z', 'A'],
-      initialState: 'q0',
-      finalStates: ['qf'],
-      transitions: {
-        'q0': {
-          'a,Z': [{ to: 'q1', push: 'AZ' }],
-          'b,Z': [{ to: 'q1', push: 'AZ' }]
-        },
-        'q1': {
-          'a,A': [{ to: 'q0', push: '' }],
-          'b,A': [{ to: 'q0', push: '' }],
-          '': [{ to: 'qf', push: '' }]
-        }
-      }
-    },
-    cfg: {
-      variables: ['S'],
-      terminals: ['a', 'b'],
-      startVariable: 'S',
-      productions: {
-        'S': ['aSa', 'bSb', '']
-      }
-    },
-    steps: [
-      'PDA alternates between q0 and q1 for each input, stack tracks even length.',
-      'Accepts even length strings.',
-      'CFG: S → aSa | bSb | ε.'
-    ]
-  },
-  // PDA→CFG Example 5
-  {
-    title: 'PDA → CFG: a^n b^m c^n d^m',
-    pda: {
-      states: ['q0', 'q1', 'q2', 'q3', 'qf'],
-      alphabet: ['a', 'b', 'c', 'd'],
       stackAlphabet: ['Z', 'A', 'B'],
       initialState: 'q0',
-      finalStates: ['qf'],
+      finalStates: ['q2'],
       transitions: {
         'q0': {
           'a,Z': [{ to: 'q0', push: 'AZ' }],
           'a,A': [{ to: 'q0', push: 'AA' }],
-          'b,A': [{ to: 'q1', push: 'A' }]
+          'b,Z': [{ to: 'q0', push: 'BZ' }],
+          'b,B': [{ to: 'q0', push: 'BB' }],
+          'ε,Z': [{ to: 'q1', push: 'Z' }],
+          'ε,A': [{ to: 'q1', push: 'A' }],
+          'ε,B': [{ to: 'q1', push: 'B' }]
         },
         'q1': {
-          'b,A': [{ to: 'q1', push: 'A' }],
-          'c,A': [{ to: 'q2', push: '' }]
+          'a,A': [{ to: 'q1', push: '' }],
+          'b,B': [{ to: 'q1', push: '' }],
+          'ε,Z': [{ to: 'q2', push: 'Z' }]
         },
-        'q2': {
-          'c,A': [{ to: 'q2', push: '' }],
-          'd,Z': [{ to: 'q3', push: 'Z' }],
-          'd,A': [{ to: 'q3', push: 'A' }]
+        'q2': {}
+      }
+    },
+    cfg: {
+      variables: ['S'],
+      terminals: ['a', 'b'],
+      startVariable: 'S',
+      productions: {
+        'S': ['aSa', 'bSb', 'a', 'b', 'ε']
+      }
+    },
+    steps: [
+      'PDA pushes for first half, pops for second half.',
+      'CFG generates palindromes.'
+    ]
+  },
+  // PDA→CFG Example 5
+  {
+    title: 'PDA → CFG: accepts even length strings',
+    pda: {
+      states: ['q0', 'q1'],
+      alphabet: ['a', 'b'],
+      stackAlphabet: ['Z'],
+      initialState: 'q0',
+      finalStates: ['q0'],
+      transitions: {
+        'q0': {
+          'a,Z': [{ to: 'q1', push: 'Z' }],
+          'b,Z': [{ to: 'q1', push: 'Z' }]
         },
-        'q3': {
-          'd,A': [{ to: 'q3', push: 'A' }],
-          '': [{ to: 'qf', push: '' }]
+        'q1': {
+          'a,Z': [{ to: 'q0', push: 'Z' }],
+          'b,Z': [{ to: 'q0', push: 'Z' }]
         }
       }
     },
     cfg: {
       variables: ['S'],
-      terminals: ['a', 'b', 'c', 'd'],
+      terminals: ['a', 'b'],
       startVariable: 'S',
       productions: {
-        'S': ['aSbScd', '']
+        'S': ['aS', 'bS', 'ε']
       }
     },
     steps: [
-      'PDA pushes A for a, for each b pushes A, for each c pops A, for each d pops A.',
-      'Accepts strings with equal number of a and c, and equal number of b and d.',
-      'CFG: S → aSbScd | ε.'
+      'PDA alternates states for each symbol.',
+      'CFG generates even length strings.'
     ]
   },
   // CFL→CFG Example 1
   {
-    title: 'CFL → CFG: a^n b^n',
-    cflDescription: 'All strings of the form a^n b^n, n ≥ 0',
+    title: 'CFL → CFG: accepts a*b*',
+    cfl: {
+      productions: [
+        { left: 'S', right: 'aS' },
+        { left: 'S', right: 'bS' },
+        { left: 'S', right: 'a' },
+        { left: 'S', right: 'b' }
+      ]
+    },
     cfg: {
       variables: ['S'],
       terminals: ['a', 'b'],
       startVariable: 'S',
       productions: {
-        'S': ['aSb', '']
+        'S': ['aS', 'bS', 'a', 'b']
       }
     },
     steps: [
-      'The language consists of equal numbers of a followed by b.',
-      'The classic CFG for this is S → aSb | ε.'
+      'CFL accepts a*b* by generating a^n b^m for n, m >= 0.',
+      'CFG generates a*b* by S -> aS -> aS -> ... -> a^nS -> a^n -> bS -> bS -> ... -> b^mS -> b^m'
     ]
   },
   // CFL→CFG Example 2
   {
-    title: 'CFL → CFG: a^n b^m c^n',
-    cflDescription: 'All strings of the form a^n b^m c^n, n, m ≥ 0',
+    title: 'CFL → CFG: accepts (ab)*',
+    cfl: {
+      productions: [
+        { left: 'S', right: 'aS' },
+        { left: 'S', right: 'bS' },
+        { left: 'S', right: 'a' },
+        { left: 'S', right: 'b' }
+      ]
+    },
     cfg: {
-      variables: ['S', 'B'],
-      terminals: ['a', 'b', 'c'],
+      variables: ['S'],
+      terminals: ['a', 'b'],
       startVariable: 'S',
       productions: {
-        'S': ['aSc', 'B'],
-        'B': ['bB', '']
+        'S': ['aS', 'bS', 'a', 'b']
       }
     },
     steps: [
-      'The language consists of equal numbers of a and c, with any number of b in the middle.',
-      'CFG: S → aSc | B, B → bB | ε.'
+      'CFL accepts (ab)^n for n >= 0.',
+      'CFG generates (ab)^n by S -> aS -> aS -> ... -> a^nS -> a^n -> bS -> bS -> ... -> b^nS -> b^n'
     ]
   },
   // CFL→CFG Example 3
   {
-    title: 'CFL → CFG: Palindromes over {a, b}',
-    cflDescription: 'All palindromes over the alphabet {a, b}',
+    title: 'CFL → CFG: accepts a^n b^n c^n',
+    cfl: {
+      productions: [
+        { left: 'S', right: 'aSBC' },
+        { left: 'S', right: 'ε' },
+        { left: 'B', right: 'bB' },
+        { left: 'B', right: 'b' },
+        { left: 'C', right: 'cC' },
+        { left: 'C', right: 'c' }
+      ]
+    },
     cfg: {
-      variables: ['S'],
-      terminals: ['a', 'b'],
+      variables: ['S', 'B', 'C'],
+      terminals: ['a', 'b', 'c'],
       startVariable: 'S',
       productions: {
-        'S': ['aSa', 'bSb', 'a', 'b', '']
+        'S': ['aSBC', 'ε'],
+        'B': ['bB', 'b'],
+        'C': ['cC', 'c']
       }
     },
     steps: [
-      'A palindrome reads the same forwards and backwards.',
-      'CFG: S → aSa | bSb | a | b | ε.'
+      'CFL generates a^n b^n c^n.',
+      'CFG mirrors the CFL.'
     ]
   },
   // CFL→CFG Example 4
   {
-    title: 'CFL → CFG: Even length strings',
-    cflDescription: 'All strings of even length over {a, b}',
+    title: 'CFL → CFG: accepts strings with equal numbers of a and b',
+    cfl: {
+      productions: [
+        { left: 'S', right: 'aSb' },
+        { left: 'S', right: 'bSa' },
+        { left: 'S', right: 'ε' }
+      ]
+    },
     cfg: {
       variables: ['S'],
       terminals: ['a', 'b'],
       startVariable: 'S',
       productions: {
-        'S': ['aSa', 'aSb', 'bSa', 'bSb', '']
+        'S': ['aSb', 'bSa', 'ε']
       }
     },
     steps: [
-      'Even length strings can be built by adding two symbols at a time.',
-      'CFG: S → aSa | aSb | bSa | bSb | ε.'
+      'CFL generates equal numbers of a and b.',
+      'CFG mirrors the CFL.'
     ]
   },
   // CFL→CFG Example 5
   {
-    title: 'CFL → CFG: a^n b^n c^n (not context-free)',
-    cflDescription: 'All strings of the form a^n b^n c^n, n ≥ 0 (not a CFL)',
+    title: 'CFL → CFG: accepts palindromes over {a, b}',
+    cfl: {
+      productions: [
+        { left: 'S', right: 'aSa' },
+        { left: 'S', right: 'bSb' },
+        { left: 'S', right: 'a' },
+        { left: 'S', right: 'b' },
+        { left: 'S', right: 'ε' }
+      ]
+    },
     cfg: {
-      variables: [],
-      terminals: ['a', 'b', 'c'],
-      startVariable: '',
-      productions: {}
+      variables: ['S'],
+      terminals: ['a', 'b'],
+      startVariable: 'S',
+      productions: {
+        'S': ['aSa', 'bSb', 'a', 'b', 'ε']
+      }
     },
     steps: [
-      'This language is not context-free and cannot be generated by any CFG.'
+      'CFL generates palindromes.',
+      'CFG mirrors the CFL.'
+    ]
+  },
+  // TM→FA Example 1
+  {
+    title: 'TM → FA: accepts a*',
+    tm: {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a'],
+      tapeAlphabet: ['a', '#'],
+      initialState: 'q0',
+      finalStates: ['q2'],
+      transitions: {
+        'q0': { 'a': ['q1', 'R', 'a'] },
+        'q1': { 'a': ['q1', 'R', 'a'] },
+        'q2': {}
+      }
+    },
+    fa: {
+      states: ['Q0', 'Q1', 'Q2'],
+      alphabet: ['a'],
+      initialState: 'Q0',
+      finalStates: ['Q2'],
+      transitions: {
+        'Q0': { 'a': 'Q1' },
+        'Q1': { 'a': 'Q1' },
+        'Q2': {}
+      }
+    },
+    steps: [
+      'TM accepts a* by reading a, moving right, and writing a.',
+      'FA has a chain of three states.'
+    ]
+  },
+  // TM→FA Example 2
+  {
+    title: 'TM → FA: accepts (ab)*',
+    tm: {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a', 'b'],
+      tapeAlphabet: ['a', 'b', '#'],
+      initialState: 'q0',
+      finalStates: ['q2'],
+      transitions: {
+        'q0': { 'a': ['q1', 'R', 'a'] },
+        'q1': { 'b': ['q2', 'R', 'b'] },
+        'q2': {}
+      }
+    },
+    fa: {
+      states: ['Q0', 'Q1', 'Q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q2'],
+      transitions: {
+        'Q0': { 'a': 'Q1', 'b': 'Q2' },
+        'Q1': { 'a': 'Q1', 'b': 'Q2' },
+        'Q2': {}
+      }
+    },
+    steps: [
+      'TM accepts (ab)* by reading a, moving right, and writing a.',
+      'FA cycles between two states.'
+    ]
+  },
+  // TM→FA Example 3
+  {
+    title: 'TM → FA: accepts 0*1',
+    tm: {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['0', '1'],
+      tapeAlphabet: ['0', '1', '#'],
+      initialState: 'q0',
+      finalStates: ['q2'],
+      transitions: {
+        'q0': { '0': ['q0', 'R', '0'], '1': ['q1', 'R', '1'] },
+        'q1': { '1': ['q1', 'R', '1'] },
+        'q2': {}
+      }
+    },
+    fa: {
+      states: ['Q0', 'Q1', 'Q2'],
+      alphabet: ['0', '1'],
+      initialState: 'Q0',
+      finalStates: ['Q2'],
+      transitions: {
+        'Q0': { '0': 'Q0', '1': 'Q1' },
+        'Q1': { '1': 'Q1' },
+        'Q2': {}
+      }
+    },
+    steps: [
+      'TM accepts 0*1 by reading 0s, then 1s.',
+      'FA has a chain of three states.'
+    ]
+  },
+  // TM→FA Example 4
+  {
+    title: 'TM → FA: accepts only 0',
+    tm: {
+      states: ['q0', 'q1'],
+      alphabet: ['0'],
+      tapeAlphabet: ['0', '#'],
+      initialState: 'q0',
+      finalStates: ['q1'],
+      transitions: {
+        'q0': { '0': ['q1', 'R', '0'] },
+        'q1': {}
+      }
+    },
+    fa: {
+      states: ['Q0', 'Q1'],
+      alphabet: ['0'],
+      initialState: 'Q0',
+      finalStates: ['Q1'],
+      transitions: {
+        'Q0': { '0': 'Q1' },
+        'Q1': {}
+      }
+    },
+    steps: [
+      'TM accepts only 0.',
+      'FA has two states.'
+    ]
+  },
+  // TM→FA Example 5
+  {
+    title: 'TM → FA: accepts palindromes over {0,1}',
+    tm: {
+      states: ['q0', 'q1', 'q2', 'q3'],
+      alphabet: ['0', '1'],
+      tapeAlphabet: ['0', '1', '#'],
+      initialState: 'q0',
+      finalStates: ['q3'],
+      transitions: {
+        'q0': { '0': ['q1', 'R', '0'], '1': ['q2', 'R', '1'] },
+        'q1': { '0': ['q1', 'R', '0'], '1': ['q1', 'R', '1'], 'ε': ['q3', 'ε', 'ε'] },
+        'q2': { '0': ['q2', 'R', '0'], '1': ['q2', 'R', '1'], 'ε': ['q3', 'ε', 'ε'] },
+        'q3': {}
+      }
+    },
+    fa: {
+      states: ['Q0', 'Q1', 'Q2', 'Q3'],
+      alphabet: ['0', '1'],
+      initialState: 'Q0',
+      finalStates: ['Q3'],
+      transitions: {
+        'Q0': { '0': 'Q1', '1': 'Q2' },
+        'Q1': { '0': 'Q1', '1': 'Q1' },
+        'Q2': { '0': 'Q2', '1': 'Q2' },
+        'Q3': {}
+      }
+    },
+    steps: [
+      'TM accepts palindromes by simulating both directions.',
+      'FA has four states.'
+    ]
+  },
+  // DFA Minimizer Example 1
+  {
+    title: 'DFA Minimizer: accepts a*',
+    dfa: {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a'],
+      initialState: 'q0',
+      finalStates: ['q2'],
+      transitions: {
+        'q0': { 'a': ['q1'] },
+        'q1': { 'a': ['q2'] },
+        'q2': {}
+      }
+    },
+    minDfa: {
+      states: ['q0', 'q1'],
+      alphabet: ['a'],
+      initialState: 'q0',
+      finalStates: ['q1'],
+      transitions: {
+        'q0': { 'a': 'q1' },
+        'q1': {}
+      }
+    },
+    steps: [
+      'DFA accepts a* by reading a, going to q1, and then to q2.',
+      'Minimized DFA has two states, q0 and q1.'
+    ]
+  },
+  // DFA Minimizer Example 2
+  {
+    title: 'DFA Minimizer: accepts ab',
+    dfa: {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q2'],
+      transitions: {
+        'q0': { 'a': ['q1'], 'b': ['q2'] },
+        'q1': {},
+        'q2': {}
+      }
+    },
+    minDfa: {
+      states: ['q0', 'q1'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q1'],
+      transitions: {
+        'q0': { 'a': 'q1', 'b': 'q1' },
+        'q1': {}
+      }
+    },
+    steps: [
+      'DFA accepts ab by reading a, going to q1, and then to q2.',
+      'Minimized DFA has two states, q0 and q1.'
+    ]
+  },
+  // DFA Minimizer Example 3
+  {
+    title: 'DFA Minimizer: accepts (a|b)*',
+    dfa: {
+      states: ['q0', 'q1'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q0'],
+      transitions: {
+        'q0': { 'a': ['q0'], 'b': ['q0'] },
+        'q1': { 'a': ['q1'], 'b': ['q1'] }
+      }
+    },
+    minDfa: {
+      states: ['q0'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q0'],
+      transitions: {
+        'q0': { 'a': 'q0', 'b': 'q0' }
+      }
+    },
+    steps: [
+      'DFA accepts (a|b)* with a single state.',
+      'Minimized DFA is the same.'
+    ]
+  },
+  // DFA Minimizer Example 4
+  {
+    title: 'DFA Minimizer: accepts a*b*',
+    dfa: {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q2'],
+      transitions: {
+        'q0': { 'a': ['q0'], 'b': ['q1'] },
+        'q1': { 'b': ['q2'] },
+        'q2': {}
+      }
+    },
+    minDfa: {
+      states: ['q0', 'q1'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q1'],
+      transitions: {
+        'q0': { 'a': 'q0', 'b': 'q1' },
+        'q1': { 'b': 'q1' }
+      }
+    },
+    steps: [
+      'DFA accepts a*b*.',
+      'Minimized DFA has two states.'
+    ]
+  },
+  // DFA Minimizer Example 5
+  {
+    title: 'DFA Minimizer: accepts ab*',
+    dfa: {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q2'],
+      transitions: {
+        'q0': { 'a': ['q1'] },
+        'q1': { 'b': ['q2'] },
+        'q2': { 'b': ['q2'] }
+      }
+    },
+    minDfa: {
+      states: ['q0', 'q1'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q1'],
+      transitions: {
+        'q0': { 'a': 'q1' },
+        'q1': { 'b': 'q1' }
+      }
+    },
+    steps: [
+      'DFA accepts ab*.',
+      'Minimized DFA has two states.'
+    ]
+  },
+  // ε-NFA→DFA Example 1
+  {
+    title: 'ε-NFA → DFA: accepts (a|b)*',
+    enfa: {
+      states: ['q0'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q0'],
+      transitions: {
+        'q0': { 'a': ['q0'], 'b': ['q0'], 'ε': ['q0'] }
+      }
+    },
+    dfa: {
+      states: ['Q0'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q0'],
+      transitions: {
+        'Q0': { 'a': 'Q0', 'b': 'Q0' }
+      }
+    },
+    steps: [
+      'Remove ε-transitions and apply subset construction.',
+      'DFA accepts any string of a and b.'
+    ]
+  },
+  // ε-NFA→DFA Example 2
+  {
+    title: 'ε-NFA → DFA: accepts ab',
+    enfa: {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q2'],
+      transitions: {
+        'q0': { 'a': ['q1'], 'ε': ['q2'] },
+        'q1': { 'b': ['q2'] },
+        'q2': {}
+      }
+    },
+    dfa: {
+      states: ['Q0', 'Q1', 'Q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q2'],
+      transitions: {
+        'Q0': { 'a': 'Q1', 'b': 'Q2' },
+        'Q1': { 'a': 'Q1', 'b': 'Q2' },
+        'Q2': { 'a': 'Q1', 'b': 'Q2' }
+      }
+    },
+    steps: [
+      'Remove ε-transitions and apply subset construction for ab.',
+      'DFA has three states.'
+    ]
+  },
+  // ε-NFA→DFA Example 3
+  {
+    title: 'ε-NFA → DFA: accepts a+b',
+    enfa: {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q2'],
+      transitions: {
+        'q0': { 'a': ['q1'], 'b': ['q2'], 'ε': ['q2'] },
+        'q1': {},
+        'q2': {}
+      }
+    },
+    dfa: {
+      states: ['Q0', 'Q1', 'Q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q1', 'Q2'],
+      transitions: {
+        'Q0': { 'a': 'Q1', 'b': 'Q2' },
+        'Q1': { 'a': 'Q1', 'b': 'Q2' },
+        'Q2': { 'a': 'Q1', 'b': 'Q2' }
+      }
+    },
+    steps: [
+      'Remove ε-transitions and apply subset construction for a or b.',
+      'DFA has two final states.'
+    ]
+  },
+  // ε-NFA→DFA Example 4
+  {
+    title: 'ε-NFA → DFA: accepts (ab)*',
+    enfa: {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q0'],
+      transitions: {
+        'q0': { 'a': ['q1'], 'ε': ['q2'] },
+        'q1': { 'b': ['q0'] },
+        'q2': {}
+      }
+    },
+    dfa: {
+      states: ['Q0', 'Q1'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q0'],
+      transitions: {
+        'Q0': { 'a': 'Q1', 'b': 'Q0' },
+        'Q1': { 'a': 'Q1', 'b': 'Q0' }
+      }
+    },
+    steps: [
+      'Remove ε-transitions and apply subset construction for (ab)*.',
+      'DFA cycles between two states.'
+    ]
+  },
+  // ε-NFA→DFA Example 5
+  {
+    title: 'ε-NFA → DFA: accepts a*b*',
+    enfa: {
+      states: ['q0', 'q1'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q1'],
+      transitions: {
+        'q0': { 'a': ['q0'], 'b': ['q1'], 'ε': ['q1'] },
+        'q1': { 'b': ['q1'] }
+      }
+    },
+    dfa: {
+      states: ['Q0', 'Q1'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q1'],
+      transitions: {
+        'Q0': { 'a': 'Q0', 'b': 'Q1' },
+        'Q1': { 'a': 'Q0', 'b': 'Q1' }
+      }
+    },
+    steps: [
+      'Remove ε-transitions and apply subset construction for a*b*.',
+      'DFA has two states, Q0 and Q1.'
+    ]
+  }
+];
+
+// NFA→DFA Examples
+window.nfaToDfaExamples = [
+  // Example 1
+  {
+    title: 'NFA → DFA: accepts a*',
+    nfa: {
+      states: ['q0'],
+      alphabet: ['a'],
+      initialState: 'q0',
+      finalStates: ['q0'],
+      transitions: {
+        'q0': { 'a': ['q0'] }
+      }
+    },
+    dfa: {
+      states: ['Q0'],
+      alphabet: ['a'],
+      initialState: 'Q0',
+      finalStates: ['Q0'],
+      transitions: {
+        'Q0': { 'a': 'Q0' }
+      }
+    },
+    steps: [
+      'Subset construction for a single state NFA with self-loop on a.',
+      'DFA is identical to NFA.'
+    ]
+  },
+  // Example 2
+  {
+    title: 'NFA → DFA: accepts ab',
+    nfa: {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q2'],
+      transitions: {
+        'q0': { 'a': ['q1'] },
+        'q1': { 'b': ['q2'] },
+        'q2': {}
+      }
+    },
+    dfa: {
+      states: ['Q0', 'Q1', 'Q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q2'],
+      transitions: {
+        'Q0': { 'a': 'Q1' },
+        'Q1': { 'b': 'Q2' },
+        'Q2': {}
+      }
+    },
+    steps: [
+      'Subset construction for NFA accepting ab.',
+      'DFA has a chain of three states.'
+    ]
+  },
+  // Example 3
+  {
+    title: 'NFA → DFA: accepts a+b',
+    nfa: {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q2'],
+      transitions: {
+        'q0': { 'a': ['q1'], 'b': ['q2'] },
+        'q1': {},
+        'q2': {}
+      }
+    },
+    dfa: {
+      states: ['Q0', 'Q1', 'Q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q1', 'Q2'],
+      transitions: {
+        'Q0': { 'a': 'Q1', 'b': 'Q2' },
+        'Q1': { 'a': 'Q1', 'b': 'Q2' },
+        'Q2': { 'a': 'Q1', 'b': 'Q2' }
+      }
+    },
+    steps: [
+      'Subset construction for NFA accepting a or b.',
+      'DFA has two final states.'
+    ]
+  },
+  // Example 4
+  {
+    title: 'NFA → DFA: accepts (ab)*',
+    nfa: {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q0'],
+      transitions: {
+        'q0': { 'a': ['q1'] },
+        'q1': { 'b': ['q0'] },
+        'q2': {}
+      }
+    },
+    dfa: {
+      states: ['Q0', 'Q1'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q0'],
+      transitions: {
+        'Q0': { 'a': 'Q1', 'b': 'Q0' },
+        'Q1': { 'a': 'Q1', 'b': 'Q0' }
+      }
+    },
+    steps: [
+      'Subset construction for NFA accepting (ab)*.',
+      'DFA cycles between two states.'
+    ]
+  },
+  // Example 5
+  {
+    title: 'NFA → DFA: accepts a*b*',
+    nfa: {
+      states: ['q0', 'q1'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q1'],
+      transitions: {
+        'q0': { 'a': ['q0'], 'b': ['q1'] },
+        'q1': { 'b': ['q1'] }
+      }
+    },
+    dfa: {
+      states: ['Q0', 'Q1'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q1'],
+      transitions: {
+        'Q0': { 'a': 'Q0', 'b': 'Q1' },
+        'Q1': { 'a': 'Q0', 'b': 'Q1' }
+      }
+    },
+    steps: [
+      'Subset construction for NFA accepting a*b*.',
+      'DFA has two states, Q0 and Q1.'
+    ]
+  }
+];
+// ε-NFA→DFA Examples
+window.enfaToDfaExamples = [
+  // Example 1
+  {
+    title: 'ε-NFA → DFA: accepts (a|b)*',
+    enfa: {
+      states: ['q0'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q0'],
+      transitions: {
+        'q0': { 'a': ['q0'], 'b': ['q0'], 'ε': ['q0'] }
+      }
+    },
+    dfa: {
+      states: ['Q0'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q0'],
+      transitions: {
+        'Q0': { 'a': 'Q0', 'b': 'Q0' }
+      }
+    },
+    steps: [
+      'Remove ε-transitions and apply subset construction.',
+      'DFA accepts any string of a and b.'
+    ]
+  },
+  // Example 2
+  {
+    title: 'ε-NFA → DFA: accepts ab',
+    enfa: {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q2'],
+      transitions: {
+        'q0': { 'a': ['q1'], 'ε': ['q2'] },
+        'q1': { 'b': ['q2'] },
+        'q2': {}
+      }
+    },
+    dfa: {
+      states: ['Q0', 'Q1', 'Q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q2'],
+      transitions: {
+        'Q0': { 'a': 'Q1', 'b': 'Q2' },
+        'Q1': { 'a': 'Q1', 'b': 'Q2' },
+        'Q2': { 'a': 'Q1', 'b': 'Q2' }
+      }
+    },
+    steps: [
+      'Remove ε-transitions and apply subset construction for ab.',
+      'DFA has three states.'
+    ]
+  },
+  // Example 3
+  {
+    title: 'ε-NFA → DFA: accepts a+b',
+    enfa: {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q2'],
+      transitions: {
+        'q0': { 'a': ['q1'], 'b': ['q2'], 'ε': ['q2'] },
+        'q1': {},
+        'q2': {}
+      }
+    },
+    dfa: {
+      states: ['Q0', 'Q1', 'Q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q1', 'Q2'],
+      transitions: {
+        'Q0': { 'a': 'Q1', 'b': 'Q2' },
+        'Q1': { 'a': 'Q1', 'b': 'Q2' },
+        'Q2': { 'a': 'Q1', 'b': 'Q2' }
+      }
+    },
+    steps: [
+      'Remove ε-transitions and apply subset construction for a or b.',
+      'DFA has two final states.'
+    ]
+  },
+  // Example 4
+  {
+    title: 'ε-NFA → DFA: accepts (ab)*',
+    enfa: {
+      states: ['q0', 'q1', 'q2'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q0'],
+      transitions: {
+        'q0': { 'a': ['q1'], 'ε': ['q2'] },
+        'q1': { 'b': ['q0'] },
+        'q2': {}
+      }
+    },
+    dfa: {
+      states: ['Q0', 'Q1'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q0'],
+      transitions: {
+        'Q0': { 'a': 'Q1', 'b': 'Q0' },
+        'Q1': { 'a': 'Q1', 'b': 'Q0' }
+      }
+    },
+    steps: [
+      'Remove ε-transitions and apply subset construction for (ab)*.',
+      'DFA cycles between two states.'
+    ]
+  },
+  // Example 5
+  {
+    title: 'ε-NFA → DFA: accepts a*b*',
+    enfa: {
+      states: ['q0', 'q1'],
+      alphabet: ['a', 'b'],
+      initialState: 'q0',
+      finalStates: ['q1'],
+      transitions: {
+        'q0': { 'a': ['q0'], 'b': ['q1'], 'ε': ['q1'] },
+        'q1': { 'b': ['q1'] }
+      }
+    },
+    dfa: {
+      states: ['Q0', 'Q1'],
+      alphabet: ['a', 'b'],
+      initialState: 'Q0',
+      finalStates: ['Q1'],
+      transitions: {
+        'Q0': { 'a': 'Q0', 'b': 'Q1' },
+        'Q1': { 'a': 'Q0', 'b': 'Q1' }
+      }
+    },
+    steps: [
+      'Remove ε-transitions and apply subset construction for a*b*.',
+      'DFA has two states, Q0 and Q1.'
     ]
   }
 ];
@@ -663,6 +1405,8 @@ window.addEventListener('DOMContentLoaded', () => {
   const isNfaToRegexPage = window.location.pathname.includes('nfa-to-regex.html');
   const isRegexToNfaPage = window.location.pathname.includes('regex-to-nfa.html');
   const isToaToFaPage = window.location.pathname.includes('toa-to-fa.html');
+  const isNfaToDfaPage = window.location.pathname.includes('nfa-to-dfa.html');
+  const isEnfaToDfaPage = window.location.pathname.includes('enfa-to-dfa.html');
   
   let examples = window.solvedExamples;
   
@@ -676,6 +1420,12 @@ window.addEventListener('DOMContentLoaded', () => {
   } else if (isToaToFaPage) {
     // Show only TOA→FA examples (last 5)
     examples = window.solvedExamples.slice(10, 15);
+  } else if (isNfaToDfaPage) {
+    // Show only NFA→DFA examples
+    examples = window.nfaToDfaExamples;
+  } else if (isEnfaToDfaPage) {
+    // Show only ε-NFA→DFA examples
+    examples = window.enfaToDfaExamples;
   }
   
   examplesDiv.innerHTML = examples.map((ex, i) =>
@@ -723,6 +1473,32 @@ window.addEventListener('DOMContentLoaded', () => {
         const faRenderer = new VisGraphRenderer('dfa-graph-vis');
         faRenderer.renderAutomaton(ex.fa, 'dfa');
         window.dfaGraphRenderer = faRenderer;
+      } else if (isNfaToDfaPage && ex.nfa && ex.dfa) {
+        // NFA→DFA example
+        // Load the NFA into the visual builder (upper box)
+        if (window.visualNFABuilder) {
+          window.visualNFABuilder.loadNFA(ex.nfa);
+        }
+        // Render the NFA in the upper box
+        const nfaRenderer = new VisGraphRenderer('nfa-graph-vis');
+        nfaRenderer.renderAutomaton(ex.nfa, 'nfa');
+        window.nfaGraphRenderer = nfaRenderer;
+        // Render the DFA in the lower box
+        const dfaRenderer = new VisGraphRenderer('dfa-graph-vis');
+        dfaRenderer.renderAutomaton(ex.dfa, 'dfa');
+        window.dfaGraphRenderer = dfaRenderer;
+      } else if (isEnfaToDfaPage && ex.enfa && ex.dfa) {
+        // ε-NFA→DFA example
+        // Ensure the ENFA builder is initialized
+        if (!window.visualENFABuilder) {
+          window.visualENFABuilder = new VisualENFABuilder('enfa-graph-vis');
+        }
+        // Load the ε-NFA into the visual builder (upper box)
+        window.visualENFABuilder.loadENFA(ex.enfa);
+        // Render the DFA in the lower box
+        const dfaRenderer = new VisGraphRenderer('dfa-graph-vis');
+        dfaRenderer.renderAutomaton(ex.dfa, 'dfa');
+        window.dfaGraphRenderer = dfaRenderer;
       }
       
       // Show steps

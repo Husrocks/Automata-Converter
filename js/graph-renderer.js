@@ -60,6 +60,7 @@ class VisGraphRenderer {
         // Add edges (combine labels for same from-to)
         const edgeMap = new Map();
         const isPDA = automaton.stackAlphabet !== undefined || type === 'pda';
+        const isTM = automaton.tapeAlphabet !== undefined || type === 'tm';
         for (const fromState in automaton.transitions) {
             const transitions = automaton.transitions[fromState];
             for (const symbol in transitions) {
@@ -68,9 +69,7 @@ class VisGraphRenderer {
                     let toState = toStateObj;
                     let label = symbol;
                     if (isPDA && typeof toStateObj === 'object' && toStateObj.to) {
-                        // PDA transition: { to, push }
                         toState = toStateObj.to;
-                        // Parse symbol: input,stackRead
                         let input = '', stackRead = '', stackWrite = '';
                         if (symbol.includes(',')) {
                             [input, stackRead] = symbol.split(',');
@@ -79,10 +78,15 @@ class VisGraphRenderer {
                         }
                         stackWrite = toStateObj.push !== undefined ? toStateObj.push : '';
                         label = `${input || 'ε'},${stackRead || 'ε'}/${stackWrite || 'ε'}`;
+                    } else if (isTM && typeof toStateObj === 'object' && toStateObj.to) {
+                        toState = toStateObj.to;
+                        const read = symbol || 'ε';
+                        const write = toStateObj.write !== undefined ? toStateObj.write : 'ε';
+                        const move = toStateObj.move !== undefined ? toStateObj.move : '';
+                        label = `${read}/${write}${move ? ',' + move : ''}`;
                     }
                     const edgeKey = `${fromState}-${toState}`;
                     if (fromState === toState) {
-                        // Self-loop: combine all symbols into one edge
                         if (edgeMap.has(edgeKey)) {
                             const existingEdge = edgeMap.get(edgeKey);
                             existingEdge.label += `, ${label}`;

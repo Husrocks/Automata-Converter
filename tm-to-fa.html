@@ -26,7 +26,7 @@
         </a>
       </li>
       <li>
-        <a href="enfa-to-nfa.html" class="nav-item-link">
+        <a href="enfa-to-dfa.html" class="nav-item-link">
           <span class="nav-label">ε-NFA</span>
           <span class="nav-arrow">→</span>
           <span class="nav-label">DFA</span>
@@ -54,7 +54,7 @@
         </a>
       </li>
       <li><a href="pda-to-cfg.html">PDA → CFG</a></li>
-      <li><a href="cfg-to-pda.html">CFG → PDA</a></li>
+      <li><a href="cfl-to-cfg.html">CFL → CFG</a></li>
       <li><a href="tm-to-fa.html" class="active">TM → FA</a></li>
       <li><a href="dfa-minimizer.html">DFA Minimizer</a></li>
     </ul>
@@ -69,7 +69,39 @@
         <button id="add-transition" class="btn-secondary">→ Add Transition</button>
         <button id="set-initial" class="btn-info">Set Initial</button>
         <button id="set-final" class="btn-success">Set Final</button>
+        <button id="set-accepting" class="btn-success">Set Accepting</button>
+        <button id="set-rejecting" class="btn-danger">Set Rejecting</button>
         <button id="reset-nfa" class="btn-danger">Reset</button>
+      </div>
+      <!-- TM Transition Input Modal (hidden by default) -->
+      <div id="tm-transition-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:1000; align-items:center; justify-content:center;">
+        <div style="background:#18192a; padding:2rem; border-radius:1rem; min-width:320px; max-width:90vw; margin:auto;">
+          <h3 style="margin-bottom:1rem; color:#fff;">Add TM Transition</h3>
+          <div style="display:flex; flex-direction:column; gap:0.5rem;">
+            <input id="tm-from-state" placeholder="From State (e.g., q0)" style="padding:0.5rem;" />
+            <input id="tm-read" placeholder="Read Symbol (e.g., 0)" style="padding:0.5rem;" />
+            <input id="tm-write" placeholder="Write Symbol (e.g., 1)" style="padding:0.5rem;" />
+            <select id="tm-move" style="padding:0.5rem;">
+              <option value="R">Shift Right (R)</option>
+              <option value="L">Shift Left (L)</option>
+            </select>
+            <input id="tm-to-state" placeholder="To State (e.g., q1)" style="padding:0.5rem;" />
+            <button id="tm-add-transition-confirm" class="btn-primary" style="margin-top:1rem;">Add Transition</button>
+            <button id="tm-add-transition-cancel" class="btn-danger" style="margin-top:0.5rem;">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <!-- Tape Input Box -->
+      <div style="margin: 1.5rem 0; text-align:center;">
+        <label for="tm-tape-input" style="font-weight:bold; color:#fff;">Tape Input:</label>
+        <input id="tm-tape-input" type="text" placeholder="Enter tape/input string (e.g., 0011)" style="padding:0.5rem; min-width:200px; border-radius:0.5rem; border:none; margin-left:0.5rem;" />
+      </div>
+      <!-- Tape Visualization and Controls -->
+      <div id="tm-tape-visualization" style="margin: 1.5rem 0; text-align:center;"></div>
+      <div style="text-align:center; margin-bottom:1.5rem;">
+        <button id="tm-step-btn" class="btn-primary">Step</button>
+        <button id="tm-run-btn" class="btn-success">Run</button>
+        <button id="tm-reset-tape-btn" class="btn-danger">Reset Tape</button>
       </div>
       <div class="canvas-container glass" style="margin-bottom:2rem;">
         <div id="nfa-graph-vis" style="width:100%;height:340px;"></div>
@@ -122,10 +154,10 @@ window.addEventListener('DOMContentLoaded', () => {
     btn.onclick = () => {
       const idx = btn.getAttribute('data-idx');
       const ex = examples[idx];
-      // Render TM as NFA graph (if possible)
+      // Render TM as TM graph (if possible)
       if (ex.tm) {
         try {
-          new VisGraphRenderer('nfa-graph-vis').renderAutomaton(ex.tm, 'nfa');
+          new VisGraphRenderer('nfa-graph-vis').renderAutomaton(ex.tm, 'tm');
         } catch (e) {
           document.getElementById('nfa-graph-vis').innerHTML = '<div style="color:red">Cannot render TM as graph.</div>';
         }
