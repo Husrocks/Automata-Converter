@@ -18,11 +18,41 @@
     </div>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
-      <li><a href="nfa-to-dfa.html">NFA → DFA</a></li>
-      <li><a href="enfa-to-nfa.html">ε-NFA → NFA</a></li>
-      <li><a href="nfa-to-regex.html">NFA → RegEx</a></li>
-      <li><a href="regex-to-nfa.html">RegEx → NFA</a></li>
-      <li><a href="toa-to-fa.html">TOA → FA</a></li>
+      <li>
+        <a href="nfa-to-dfa.html" class="nav-item-link">
+          <span class="nav-label">NFA</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">DFA</span>
+        </a>
+      </li>
+      <li>
+        <a href="enfa-to-nfa.html" class="nav-item-link">
+          <span class="nav-label">ε-NFA</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">DFA</span>
+        </a>
+      </li>
+      <li>
+        <a href="nfa-to-regex.html" class="nav-item-link">
+          <span class="nav-label">NFA</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">RegEx</span>
+        </a>
+      </li>
+      <li>
+        <a href="regex-to-nfa.html" class="nav-item-link">
+          <span class="nav-label">RegEx</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">NFA</span>
+        </a>
+      </li>
+      <li>
+        <a href="toa-to-fa.html" class="nav-item-link">
+          <span class="nav-label">TOA</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">FA</span>
+        </a>
+      </li>
       <li><a href="pda-to-cfg.html" class="active">PDA → CFG</a></li>
       <li><a href="cfg-to-pda.html">CFG → PDA</a></li>
       <li><a href="tm-to-fa.html">TM → FA</a></li>
@@ -48,7 +78,7 @@
         <button id="convert-btn" class="btn-primary">Convert to CFG</button>
       </div>
       <div class="canvas-container glass" style="margin-top:2rem;">
-        <div id="dfa-graph-vis" style="width:100%;height:340px;"></div>
+        <div id="dfa-graph-vis" style="width:100%;height:340px; display: flex; align-items: center; justify-content: center; text-align: center;"></div>
       </div>
       <div id="step-by-step" class="glass" style="margin-top:2rem; padding:1rem;">
         <h2 style="font-size:1.2rem;">Step-by-Step Explanation</h2>
@@ -102,12 +132,13 @@ window.addEventListener('DOMContentLoaded', () => {
       } else {
         document.getElementById('nfa-graph-vis').innerHTML = '<div style="color:#888">No PDA to display.</div>';
       }
-      // Show CFG as formatted text
+      // Show CFG as formatted, centered text
       if (ex.cfg) {
-        let cfgText = `<b>Variables:</b> ${ex.cfg.variables.join(', ')}<br/><b>Terminals:</b> ${ex.cfg.terminals.join(', ')}<br/><b>Start:</b> ${ex.cfg.startVariable}<br/><b>Productions:</b><br/>`;
+        let cfgText = `<div style='display:inline-block; text-align:left; font-size:1.1rem;'><b>Variables:</b> ${ex.cfg.variables.join(', ')}<br/><b>Terminals:</b> ${ex.cfg.terminals.join(', ')}<br/><b>Start:</b> ${ex.cfg.startVariable}<br/><b>Productions:</b><br/>`;
         for (const v in ex.cfg.productions) {
           cfgText += `${v} → ${ex.cfg.productions[v].join(' | ')}<br/>`;
         }
+        cfgText += '</div>';
         document.getElementById('dfa-graph-vis').innerHTML = cfgText;
       } else {
         document.getElementById('dfa-graph-vis').innerHTML = '<div style="color:#888">No CFG to display.</div>';

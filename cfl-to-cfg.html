@@ -3,9 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NFA → RegEx | Automata Visualizer Pro</title>
+  <title>CFL → CFG | Automata Visualizer Pro</title>
   <link rel="stylesheet" href="styles.css"/>
   <script src="js/theme.js" defer></script>
+  <script src="js/graph-renderer.js" defer></script>
+  <script src="js/visual-builder.js" defer></script>
+  <script src="js/solved-examples.js"></script>
+  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 </head>
 <body>
   <nav class="navbar glass">
@@ -29,7 +33,7 @@
         </a>
       </li>
       <li>
-        <a href="nfa-to-regex.html" class="nav-item-link active">
+        <a href="nfa-to-regex.html" class="nav-item-link">
           <span class="nav-label">NFA</span>
           <span class="nav-arrow">→</span>
           <span class="nav-label">RegEx</span>
@@ -50,7 +54,7 @@
         </a>
       </li>
       <li><a href="pda-to-cfg.html">PDA → CFG</a></li>
-      <li><a href="cfg-to-pda.html">CFG → PDA</a></li>
+      <li><a href="cfl-to-cfg.html" class="active">CFL → CFG</a></li>
       <li><a href="tm-to-fa.html">TM → FA</a></li>
       <li><a href="dfa-minimizer.html">DFA Minimizer</a></li>
     </ul>
@@ -58,25 +62,19 @@
   </nav>
   <main>
     <section class="glass" style="max-width: 900px; margin: 2rem auto; padding: 2rem;">
-      <h1 class="gradient" style="font-size:2rem; font-weight:bold;">NFA → RegEx Converter</h1>
-      <p>Build your NFA visually, then see the equivalent regular expression and step-by-step conversion.</p>
-      <div class="builder-controls" style="margin: 2rem 0; display: flex; gap: 1rem; flex-wrap: wrap;">
-        <button id="add-state" class="btn-primary">+ Add State</button>
-        <button id="add-transition" class="btn-secondary">→ Add Transition</button>
-        <button id="set-initial" class="btn-info">Set Initial</button>
-        <button id="set-final" class="btn-success">Set Final</button>
-        <button id="reset-nfa" class="btn-danger">Reset</button>
+      <h1 class="gradient" style="font-size:2rem; font-weight:bold;">CFL → CFG Converter</h1>
+      <p>Describe your context-free language (CFL) or provide example strings, then see an equivalent context-free grammar (CFG) and step-by-step construction.</p>
+      <div class="cfg-input-container" style="margin-bottom:1rem;">
+        <label for="cfl-input"><b>Describe CFL (e.g. 'strings of the form a^n b^n', or provide example strings):</b></label>
+        <textarea id="cfl-input" rows="6" style="width:100%;font-family:monospace;"></textarea>
+        <button id="infer-cfg-btn" class="btn-primary" style="margin-top:0.5rem;">Infer CFG</button>
       </div>
-      <div class="canvas-container glass" style="margin-bottom:2rem;">
-        <div id="nfa-graph-vis" style="width:100%;height:340px;"></div>
-      </div>
+      <div id="parsed-cfg-output" class="glass" style="margin-bottom:2rem;padding:1rem;"></div>
       <div style="text-align:right;">
-        <button id="convert-btn" class="btn-primary">Convert to RegEx</button>
+        <button id="convert-btn" class="btn-primary">Convert to CFG</button>
       </div>
       <div class="canvas-container glass" style="margin-top:2rem;">
-        <div id="regex-output" style="width:100%;min-height:100px;padding:1rem;background:#f8fafc;border-radius:8px;font-family:monospace;font-size:1.1rem;">
-          <label class="regex-label">Regular Expression:</label> <span id="regex-result"></span>
-        </div>
+        <div id="dfa-graph-vis" style="width:100%;height:340px; display: flex; align-items: center; justify-content: center; text-align: center;"></div>
       </div>
       <div id="step-by-step" class="glass" style="margin-top:2rem; padding:1rem;">
         <h2 style="font-size:1.2rem;">Step-by-Step Explanation</h2>
@@ -102,11 +100,55 @@
       </a>
     </span>
   </footer>
-  <!-- Move scripts here to ensure DOM is loaded first -->
-  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-  <script src="js/graph-renderer.js"></script>
-  <script src="js/solved-examples.js"></script>
-  <script src="js/visual-builder.js"></script>
-  <script src="js/nfa-to-regex.js"></script>
 </body>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  // CFL input parsing logic
+  const input = document.getElementById('cfl-input');
+  const parseBtn = document.getElementById('infer-cfg-btn');
+  const output = document.getElementById('parsed-cfg-output');
+  if (input && parseBtn && output) {
+    parseBtn.onclick = () => {
+      output.innerHTML = '<div style="color:#888">(CFG inference from CFL description is not implemented. See solved examples below.)</div>';
+    };
+  }
+
+  // Convert to CFG logic (placeholder)
+  const convertBtn = document.getElementById('convert-btn');
+  if (convertBtn && input) {
+    convertBtn.onclick = () => {
+      output.innerHTML = '<div style="color:#888">(CFG inference from CFL description is not implemented. See solved examples below.)</div>';
+    };
+  }
+
+  // Solved Examples: Only show CFL→CFG examples
+  const examplesDiv = document.getElementById('examples-content');
+  if (!examplesDiv || !window.solvedExamples) return;
+  const examples = window.solvedExamples.filter(ex => ex.cflDescription && ex.cfg);
+  if (examples.length === 0) {
+    examplesDiv.innerHTML = '<div style="color:#888">No solved examples available.</div>';
+    return;
+  }
+  examplesDiv.innerHTML = examples.map((ex, i) =>
+    `<button class="btn-secondary example-btn" data-idx="${i}">${ex.title}</button>`
+  ).join(' ');
+  examplesDiv.querySelectorAll('.example-btn').forEach(btn => {
+    btn.onclick = () => {
+      const idx = btn.getAttribute('data-idx');
+      const ex = examples[idx];
+      // Show CFL description
+      let cflText = `<div style='margin-bottom:1rem;'><b>CFL Description:</b> ${ex.cflDescription}</div>`;
+      // Show CFG as formatted, centered text
+      let cfgText = `<div style='display:inline-block; text-align:left; font-size:1.1rem;'><b>Variables:</b> ${ex.cfg.variables.join(', ')}<br/><b>Terminals:</b> ${ex.cfg.terminals.join(', ')}<br/><b>Start:</b> ${ex.cfg.startVariable}<br/><b>Productions:</b><br/>`;
+      for (const v in ex.cfg.productions) {
+        cfgText += `${v} → ${ex.cfg.productions[v].join(' | ')}<br/>`;
+      }
+      cfgText += '</div>';
+      document.getElementById('dfa-graph-vis').innerHTML = cflText + cfgText;
+      // Show steps
+      document.getElementById('steps-content').innerHTML = ex.steps.map(s => `<div class='step'>${s}</div>`).join('');
+    };
+  });
+});
+</script>
 </html> 

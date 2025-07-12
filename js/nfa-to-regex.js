@@ -8,172 +8,87 @@ function convertNfaToRegex(nfa) {
 }
 
 function stateElimination(nfa, steps) {
-  // Create a copy of the NFA for manipulation
-  const automaton = JSON.parse(JSON.stringify(nfa));
-  const states = [...automaton.states];
-  const finalStates = [...automaton.finalStates];
-  
-  steps.push('Starting NFA to RegEx conversion using state elimination method.');
-  steps.push(`Initial states: ${states.join(', ')}`);
-  steps.push(`Final states: ${finalStates.join(', ')}`);
-  
-  // If no final states, return empty language
-  if (finalStates.length === 0) {
-    steps.push('No final states found. The language is empty: ∅');
-    return '∅';
-  }
-  
-  // If no initial state, return empty language
-  if (!automaton.initialState) {
-    steps.push('No initial state found. The language is empty: ∅');
-    return '∅';
-  }
-  
-  // Add a new initial state if the current initial state has incoming transitions
-  let hasIncomingToInitial = false;
-  for (const state of states) {
-    for (const symbol in automaton.transitions[state] || {}) {
-      if (automaton.transitions[state][symbol].includes(automaton.initialState)) {
-        hasIncomingToInitial = true;
-        break;
-      }
-    }
-    if (hasIncomingToInitial) break;
-  }
-  
-  if (hasIncomingToInitial) {
-    const newInitial = 'q_start';
-    automaton.states.unshift(newInitial);
-    automaton.transitions[newInitial] = { 'ε': [automaton.initialState] };
-    automaton.initialState = newInitial;
-    steps.push(`Added new initial state ${newInitial} with ε-transition to ${automaton.initialState}`);
-  }
-  
-  // Add a new final state if there are multiple final states or outgoing transitions from final states
-  let needsNewFinal = finalStates.length > 1;
-  if (!needsNewFinal) {
-    for (const symbol in automaton.transitions[finalStates[0]] || {}) {
-      if (automaton.transitions[finalStates[0]][symbol].length > 0) {
-        needsNewFinal = true;
-        break;
-      }
-    }
-  }
-  
-  if (needsNewFinal) {
-    const newFinal = 'q_accept';
-    automaton.states.push(newFinal);
-    automaton.transitions[newFinal] = {};
-    for (const finalState of finalStates) {
-      if (!automaton.transitions[finalState]['ε']) automaton.transitions[finalState]['ε'] = [];
-      automaton.transitions[finalState]['ε'].push(newFinal);
-    }
-    automaton.finalStates = [newFinal];
-    steps.push(`Added new final state ${newFinal} with ε-transitions from all final states`);
-  }
-  
-  // Eliminate states one by one (except initial and final)
-  const statesToEliminate = automaton.states.filter(s => 
-    s !== automaton.initialState && s !== automaton.finalStates[0]
-  );
-  
-  steps.push(`States to eliminate: ${statesToEliminate.join(', ')}`);
-  
-  for (const state of statesToEliminate) {
-    steps.push(`Eliminating state ${state}...`);
-    
-    // Find all incoming and outgoing transitions
-    const incoming = [];
-    const outgoing = [];
-    const selfLoop = automaton.transitions[state][state] || [];
-    
-    for (const fromState of automaton.states) {
-      for (const symbol in automaton.transitions[fromState] || {}) {
-        if (automaton.transitions[fromState][symbol].includes(state)) {
-          incoming.push({ from: fromState, symbol, to: state });
+  // Standard state elimination using dynamic programming
+  const states = [...nfa.states];
+  const initial = nfa.initialState;
+  const finals = nfa.finalStates;
+  const n = states.length;
+  const idx = Object.fromEntries(states.map((s, i) => [s, i]));
+
+  // R[i][j][k]: regex for paths from i to j using only states <= k
+  let R = Array.from({length: n}, () => Array.from({length: n}, () => Array(n+1).fill('∅')));
+
+  // Base case: k = 0 (no intermediate states)
+  for (let i = 0; i < n; ++i) {
+    for (let j = 0; j < n; ++j) {
+      let labels = [];
+      if (nfa.transitions[states[i]]) {
+        for (const symbol in nfa.transitions[states[i]]) {
+          for (const tgt of nfa.transitions[states[i]][symbol]) {
+            if (tgt === states[j]) labels.push(symbol === 'ε' ? '' : symbol);
+          }
         }
       }
+      if (i === j) labels.push(''); // ε for self-loop
+      R[i][j][0] = labels.length ? labels.join('+') : '∅';
     }
-    
-    for (const symbol in automaton.transitions[state] || {}) {
-      for (const toState of automaton.transitions[state][symbol]) {
-        if (toState !== state) {
-          outgoing.push({ from: state, symbol, to: toState });
+  }
+
+  // DP: build up for k = 1..n
+  for (let k = 1; k <= n; ++k) {
+    for (let i = 0; i < n; ++i) {
+      for (let j = 0; j < n; ++j) {
+        const prev = R[i][j][k-1];
+        const left = R[i][k-1][k-1];
+        const loop = R[k-1][k-1][k-1];
+        const right = R[k-1][j][k-1];
+        let viaK = '∅';
+        if (left !== '∅' && right !== '∅') {
+          viaK = left + (loop !== '∅' ? `(${loop})*` : '') + right;
         }
+        R[i][j][k] = joinRegex(prev, viaK);
       }
     }
-    
-    // Create new transitions
-    for (const inc of incoming) {
-      for (const out of outgoing) {
-        const newSymbol = combineRegex(inc.symbol, selfLoop, out.symbol);
-        if (!automaton.transitions[inc.from][newSymbol]) {
-          automaton.transitions[inc.from][newSymbol] = [];
-        }
-        if (!automaton.transitions[inc.from][newSymbol].includes(out.to)) {
-          automaton.transitions[inc.from][newSymbol].push(out.to);
-        }
-      }
-    }
-    
-    // Remove the eliminated state
-    delete automaton.transitions[state];
-    automaton.states = automaton.states.filter(s => s !== state);
-    
-    steps.push(`  Added transitions: ${incoming.length * outgoing.length} new transitions`);
   }
-  
-  // Now we have only initial and final states
-  const initial = automaton.initialState;
-  const final = automaton.finalStates[0];
-  
-  steps.push(`Final step: computing regex from ${initial} to ${final}`);
-  
-  // Get the direct transition from initial to final
-  let regex = '';
-  for (const symbol in automaton.transitions[initial] || {}) {
-    if (automaton.transitions[initial][symbol].includes(final)) {
-      if (regex) regex += '|';
-      regex += symbol;
-    }
-  }
-  
-  if (!regex) {
-    regex = '∅';
-    steps.push('No path from initial to final state. Language is empty: ∅');
-  } else {
-    steps.push(`Final regular expression: ${regex}`);
-  }
-  
+
+  // Combine all initial-to-final regexes
+  const i0 = idx[initial];
+  let regexes = finals.map(f => R[i0][idx[f]][n]).filter(r => r && r !== '∅');
+  let regex = regexes.join('+') || '∅';
+  regex = simplifyRegex(regex);
+  steps.push(`Final regular expression: ${regex}`);
   return regex;
 }
 
-function combineRegex(symbol1, selfLoop, symbol2) {
-  let result = '';
-  
-  // Handle symbol1
-  if (symbol1 === 'ε') {
-    result = '';
-  } else {
-    result = symbol1;
-  }
-  
-  // Handle self-loop
-  if (selfLoop && selfLoop.length > 0) {
-    const selfLoopRegex = selfLoop.join('|');
-    if (selfLoopRegex) {
-      result += `(${selfLoopRegex})*`;
-    }
-  }
-  
-  // Handle symbol2
-  if (symbol2 === 'ε') {
-    // Do nothing
-  } else {
-    result += symbol2;
-  }
-  
-  return result || 'ε';
+function joinRegex(r1, r2) {
+  if (r1 === '∅') return r2;
+  if (r2 === '∅') return r1;
+  if (r1 === r2) return r1;
+  return r1 + '+' + r2;
+}
+
+// Simplify the resulting regex for readability
+function simplifyRegex(regex) {
+  // Remove empty parentheses and ()*
+  regex = regex.replace(/\(\)\*/g, '');
+  regex = regex.replace(/\(\)/g, '');
+  // Collapse repeated stars: a*a* => a*
+  regex = regex.replace(/(\w)\*\1\*/g, '$1*');
+  // Remove duplicate alternatives: a+a => a
+  regex = regex.split('+').filter((v, i, a) => v && a.indexOf(v) === i).join('+');
+  // Remove unnecessary pluses at start/end
+  regex = regex.replace(/^\++|\++$/g, '');
+  // Remove + before ) or after (
+  regex = regex.replace(/\+\)/g, ')').replace(/\(\+/g, '(');
+  // Remove +
+  regex = regex.replace(/\++/g, '+');
+  // Remove trailing +
+  regex = regex.replace(/\+$/g, '');
+  // Remove leading +
+  regex = regex.replace(/^\+/, '');
+  // Remove redundant parentheses around single symbols
+  regex = regex.replace(/\((\w)\)/g, '$1');
+  return regex;
 }
 
 // Export for use in UI

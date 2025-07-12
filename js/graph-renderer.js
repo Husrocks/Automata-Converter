@@ -22,7 +22,7 @@ class VisGraphRenderer {
         nodes.add({ id: 'start_node', hidden: true, physics: false });
 
         automaton.states.forEach(state => {
-            const isFinal = automaton.finalStates.includes(state);
+            const isFinal = automaton.finalStates && automaton.finalStates.includes(state);
             const isStart = automaton.initialState === state;
             const isTrap = state === '∅';
             let label = state;
@@ -59,35 +59,57 @@ class VisGraphRenderer {
 
         // Add edges (combine labels for same from-to)
         const edgeMap = new Map();
+        const isPDA = automaton.stackAlphabet !== undefined || type === 'pda';
         for (const fromState in automaton.transitions) {
             const transitions = automaton.transitions[fromState];
             for (const symbol in transitions) {
                 const targets = Array.isArray(transitions[symbol]) ? transitions[symbol] : [transitions[symbol]];
-                for (const toState of targets) {
-                    if (!toState) continue;
+                for (const toStateObj of targets) {
+                    let toState = toStateObj;
+                    let label = symbol;
+                    if (isPDA && typeof toStateObj === 'object' && toStateObj.to) {
+                        // PDA transition: { to, push }
+                        toState = toStateObj.to;
+                        // Parse symbol: input,stackRead
+                        let input = '', stackRead = '', stackWrite = '';
+                        if (symbol.includes(',')) {
+                            [input, stackRead] = symbol.split(',');
+                        } else {
+                            input = symbol;
+                        }
+                        stackWrite = toStateObj.push !== undefined ? toStateObj.push : '';
+                        label = `${input || 'ε'},${stackRead || 'ε'}/${stackWrite || 'ε'}`;
+                    }
                     const edgeKey = `${fromState}-${toState}`;
                     if (fromState === toState) {
-                        // Self-loop
-                        edges.add({
-                            id: `${fromState}-${toState}-${symbol}-${Math.random()}`,
-                            from: fromState,
-                            to: toState,
-                            label: symbol,
-                            arrows: 'to',
-                            font: { align: 'top' },
-                            color: { color: '#334155', highlight: '#ef4444' },
-                            selfReference: { size: 20, angle: Math.PI / 4 }
-                        });
+                        // Self-loop: combine all symbols into one edge
+                        if (edgeMap.has(edgeKey)) {
+                            const existingEdge = edgeMap.get(edgeKey);
+                            existingEdge.label += `, ${label}`;
+                            edges.update(existingEdge);
+                        } else {
+                            const newEdge = {
+                                id: `${fromState}-${toState}-self` ,
+                                from: fromState,
+                                to: toState,
+                                label: label,
+                                font: { align: 'top' },
+                                color: { color: '#334155', highlight: '#ef4444' },
+                                selfReference: { size: 20, angle: Math.PI / 4 }
+                            };
+                            edgeMap.set(edgeKey, newEdge);
+                            edges.add(newEdge);
+                        }
                     } else if (edgeMap.has(edgeKey)) {
                         const existingEdge = edgeMap.get(edgeKey);
-                        existingEdge.label += `, ${symbol}`;
+                        existingEdge.label += `, ${label}`;
                         edges.update(existingEdge);
                     } else {
                         const newEdge = {
-                            id: `${fromState}-${toState}-${symbol}`,
+                            id: `${fromState}-${toState}-${label}`,
                             from: fromState,
                             to: toState,
-                            label: symbol,
+                            label: label,
                             arrows: 'to',
                             font: { align: 'top' },
                             color: { color: '#334155', highlight: '#ef4444' },

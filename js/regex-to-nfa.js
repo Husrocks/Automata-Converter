@@ -1,7 +1,16 @@
 // RegEx to NFA conversion and UI integration for Automata Visualizer Pro
 
+// Add regex simplification before NFA construction
+function simplifyRegexForNFA(regex) {
+  // Remove duplicate alternatives: a*b+a*b => a*b
+  const parts = regex.split('+').map(s => s.trim()).filter(Boolean);
+  const unique = Array.from(new Set(parts));
+  return unique.join('+');
+}
+
 // Thompson's construction for basic regex (a|b, ab, a*, etc.)
 function regexToNFA(regex) {
+  regex = simplifyRegexForNFA(regex);
   let stateCount = 0;
   function newState() { return 'q' + (stateCount++); }
 
@@ -116,6 +125,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('regex-input');
   const convertBtn = document.getElementById('convert-btn');
   const stepsDiv = document.getElementById('steps-content');
+  const resetBtn = document.getElementById('reset-nfa');
 
   if (!input || !convertBtn) return;
 
@@ -136,4 +146,13 @@ window.addEventListener('DOMContentLoaded', () => {
       stepsDiv.innerHTML = `<div class='step' style='color:red;'>Error: ${e.message}</div>`;
     }
   };
+
+  if (resetBtn) {
+    resetBtn.onclick = () => {
+      input.value = '';
+      const nfaGraph = document.getElementById('nfa-graph-vis');
+      if (nfaGraph) nfaGraph.innerHTML = '';
+      stepsDiv.innerHTML = '';
+    };
+  }
 }); 

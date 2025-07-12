@@ -18,11 +18,41 @@
     </div>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
-      <li><a href="nfa-to-dfa.html">NFA → DFA</a></li>
-      <li><a href="enfa-to-nfa.html">ε-NFA → NFA</a></li>
-      <li><a href="nfa-to-regex.html">NFA → RegEx</a></li>
-      <li><a href="regex-to-nfa.html">RegEx → NFA</a></li>
-      <li><a href="toa-to-fa.html" class="active">TOA → FA</a></li>
+      <li>
+        <a href="nfa-to-dfa.html" class="nav-item-link">
+          <span class="nav-label">NFA</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">DFA</span>
+        </a>
+      </li>
+      <li>
+        <a href="enfa-to-nfa.html" class="nav-item-link">
+          <span class="nav-label">ε-NFA</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">DFA</span>
+        </a>
+      </li>
+      <li>
+        <a href="nfa-to-regex.html" class="nav-item-link">
+          <span class="nav-label">NFA</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">RegEx</span>
+        </a>
+      </li>
+      <li>
+        <a href="regex-to-nfa.html" class="nav-item-link">
+          <span class="nav-label">RegEx</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">NFA</span>
+        </a>
+      </li>
+      <li>
+        <a href="toa-to-fa.html" class="nav-item-link active">
+          <span class="nav-label">TOA</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">FA</span>
+        </a>
+      </li>
       <li><a href="pda-to-cfg.html">PDA → CFG</a></li>
       <li><a href="cfg-to-pda.html">CFG → PDA</a></li>
       <li><a href="tm-to-fa.html">TM → FA</a></li>
@@ -75,46 +105,5 @@
     </span>
   </footer>
 </body>
-<script>
-window.addEventListener('DOMContentLoaded', () => {
-  const examplesDiv = document.getElementById('examples-content');
-  if (!examplesDiv || !window.solvedExamples) return;
-  // Only show TOA→FA examples
-  const examples = window.solvedExamples.filter(ex => ex.toa && ex.fa);
-  if (examples.length === 0) {
-    examplesDiv.innerHTML = '<div style="color:#888">No solved examples available.</div>';
-    return;
-  }
-  examplesDiv.innerHTML = examples.map((ex, i) =>
-    `<button class="btn-secondary example-btn" data-idx="${i}">${ex.title}</button>`
-  ).join(' ');
-  examplesDiv.querySelectorAll('.example-btn').forEach(btn => {
-    btn.onclick = () => {
-      const idx = btn.getAttribute('data-idx');
-      const ex = examples[idx];
-      // Render TOA as NFA graph
-      if (ex.toa) {
-        try {
-          new VisGraphRenderer('nfa-graph-vis').renderAutomaton(ex.toa, 'nfa');
-        } catch (e) {
-          document.getElementById('nfa-graph-vis').innerHTML = '<div style="color:red">Cannot render TOA as graph.</div>';
-        }
-      } else {
-        document.getElementById('nfa-graph-vis').innerHTML = '<div style="color:#888">No TOA to display.</div>';
-      }
-      // Render FA as DFA graph
-      if (ex.fa) {
-        try {
-          new VisGraphRenderer('dfa-graph-vis').renderAutomaton(ex.fa, 'dfa');
-        } catch (e) {
-          document.getElementById('dfa-graph-vis').innerHTML = '<div style="color:red">Cannot render FA as graph.</div>';
-        }
-      } else {
-        document.getElementById('dfa-graph-vis').innerHTML = '<div style="color:#888">No FA to display.</div>';
-      }
-      document.getElementById('steps-content').innerHTML = ex.steps.map(s => `<div class='step'>${s}</div>`).join('');
-    };
-  });
-});
-</script>
+<script src="js/toa-to-fa.js"></script>
 </html> 

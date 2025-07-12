@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ε-NFA → NFA | Automata Visualizer Pro</title>
+  <title>ε-NFA → DFA | Automata Visualizer Pro</title>
   <link rel="stylesheet" href="styles.css"/>
   <script src="js/theme.js" defer></script>
 </head>
@@ -14,11 +14,41 @@
     </div>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
-      <li><a href="nfa-to-dfa.html">NFA → DFA</a></li>
-      <li><a href="enfa-to-nfa.html" class="active">ε-NFA → NFA</a></li>
-      <li><a href="nfa-to-regex.html">NFA → RegEx</a></li>
-      <li><a href="regex-to-nfa.html">RegEx → NFA</a></li>
-      <li><a href="toa-to-fa.html">TOA → FA</a></li>
+      <li>
+        <a href="nfa-to-dfa.html" class="nav-item-link">
+          <span class="nav-label">NFA</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">DFA</span>
+        </a>
+      </li>
+      <li>
+        <a href="enfa-to-nfa.html" class="nav-item-link active">
+          <span class="nav-label">ε-NFA</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">DFA</span>
+        </a>
+      </li>
+      <li>
+        <a href="nfa-to-regex.html" class="nav-item-link">
+          <span class="nav-label">NFA</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">RegEx</span>
+        </a>
+      </li>
+      <li>
+        <a href="regex-to-nfa.html" class="nav-item-link">
+          <span class="nav-label">RegEx</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">NFA</span>
+        </a>
+      </li>
+      <li>
+        <a href="toa-to-fa.html" class="nav-item-link">
+          <span class="nav-label">TOA</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">FA</span>
+        </a>
+      </li>
       <li><a href="pda-to-cfg.html">PDA → CFG</a></li>
       <li><a href="cfg-to-pda.html">CFG → PDA</a></li>
       <li><a href="tm-to-fa.html">TM → FA</a></li>
@@ -28,8 +58,8 @@
   </nav>
   <main>
     <section class="glass" style="max-width: 900px; margin: 2rem auto; padding: 2rem;">
-      <h1 class="gradient" style="font-size:2rem; font-weight:bold;">ε-NFA → NFA Converter</h1>
-      <p>Build your ε-NFA visually, then see the NFA and step-by-step conversion.</p>
+      <h1 class="gradient" style="font-size:2rem; font-weight:bold;">ε-NFA → DFA Converter</h1>
+      <p>Build your ε-NFA visually, then see the DFA and step-by-step conversion.</p>
       <div class="builder-controls" style="margin: 2rem 0; display: flex; gap: 1rem; flex-wrap: wrap;">
         <button id="add-state" class="btn-primary">+ Add State</button>
         <button id="add-transition" class="btn-secondary">→ Add Transition</button>
@@ -40,13 +70,14 @@
         <button id="fit-all-view" class="btn-info">Fit All Graphs</button>
       </div>
       <div class="canvas-container glass" style="margin-bottom:2rem;">
+        <div style="font-weight:bold; color:#7dd3fc; margin-bottom:0.5em;">ε-NFA Graph</div>
         <div id="enfa-graph-vis" style="width:100%;height:340px;"></div>
       </div>
       <div style="text-align:right;">
-        <button id="convert-btn" class="btn-primary">Convert to NFA</button>
+        <button id="convert-btn" class="btn-primary">Convert to DFA</button>
       </div>
       <div class="canvas-container glass" style="margin-top:2rem;">
-        <div id="nfa-graph-vis" style="width:100%;height:340px;"></div>
+        <div id="dfa-graph-vis" style="width:100%;height:340px;"></div>
       </div>
       <div id="step-by-step" class="glass" style="margin-top:2rem; padding:1rem;">
         <h2 style="font-size:1.2rem;">Step-by-Step Explanation</h2>

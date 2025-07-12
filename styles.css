@@ -174,14 +174,24 @@ body.dark .nav-links a.cta, body.dark .nav-links a.cta:active, body.dark .nav-li
   box-shadow: 0 2px 8px 0 #2563eb44;
 }
 #regex-result {
-  color: var(--primary);
+  color: #111827;
+  background: #fff;
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 2em;
   letter-spacing: 1px;
-  transition: color 0.2s;
+  padding: 0.7em 1.2em;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(56,189,248,0.10);
+  margin: 1em 0;
+  display: inline-block;
 }
 body.dark #regex-result {
-  color: var(--accent);
+  color: #38bdf8;
+  background: #181f2a;
+}
+#regex-result::selection, #regex-result *::selection {
+  background: #38bdf8;
+  color: #fff;
 }
 button {
   background: #e0f0ff;
@@ -367,4 +377,18 @@ body.dark .footer-icon-link:hover, body.dark .footer-icon-link:focus {
   margin: 0 0.1em;
   display: flex;
   align-items: center;
+} 
+.canvas-container {
+  max-height: 400px;
+  overflow-y: auto;
+} 
+.regex-label {
+  color: #000;
+  font-size: 1.3em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  display: block;
+}
+body.dark .regex-label {
+  color: #000;
 } 

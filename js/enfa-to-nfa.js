@@ -211,15 +211,21 @@ window.addEventListener('DOMContentLoaded', () => {
       alert('Please set at least one final state for the ε-NFA before converting.');
       return;
     }
-    
-    const { nfa, steps } = convertEnfaToNfa(enfa);
-    const nfaRenderer = new VisGraphRenderer('nfa-graph-vis');
-    nfaRenderer.renderAutomaton(nfa, 'nfa');
-    // Save renderer globally for fit view
-    window.nfaGraphRenderer = nfaRenderer;
-    
+    // Convert ε-NFA to NFA
+    const { nfa, steps: enfaSteps } = convertEnfaToNfa(enfa);
+    // Convert NFA to DFA
+    const { dfa, steps: dfaSteps } = window.convertNfaToDfa ? window.convertNfaToDfa(nfa) : { dfa: null, steps: [] };
+    if (!dfa) {
+      alert('DFA conversion failed.');
+      return;
+    }
+    // Render DFA
+    const dfaRenderer = new VisGraphRenderer('dfa-graph-vis');
+    dfaRenderer.renderAutomaton(dfa, 'dfa');
+    window.dfaGraphRenderer = dfaRenderer;
+    // Show combined steps
     const stepsDiv = document.getElementById('steps-content');
-    stepsDiv.innerHTML = steps.map(s => `<div class='step'>${s}</div>`).join('');
+    stepsDiv.innerHTML = [...enfaSteps, ...dfaSteps].map(s => `<div class='step'>${typeof s === 'string' ? s : s.message || ''}</div>`).join('');
   };
 
   // Fit All Graphs button
