@@ -1,6 +1,6 @@
 <<<<<<< HEAD
 # NFA to DFA Converter
-
+Live Demo: https://husrocks.github.io/Automata-Converter/
 An interactive web application for learning automata theory, specifically focused on converting Non-Deterministic Finite Automata (NFA) to Deterministic Finite Automata (DFA) using the subset construction algorithm.
 
 ## 🌟 Features
