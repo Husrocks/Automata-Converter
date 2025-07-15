@@ -94,12 +94,12 @@ class VisGraphRenderer {
                         } else {
                             const newEdge = {
                                 id: `${fromState}-${toState}-self` ,
-                                from: fromState,
-                                to: toState,
+                            from: fromState,
+                            to: toState,
                                 label: label,
-                                font: { align: 'top' },
-                                color: { color: '#334155', highlight: '#ef4444' },
-                                selfReference: { size: 20, angle: Math.PI / 4 }
+                            font: { align: 'top' },
+                            color: { color: '#334155', highlight: '#ef4444' },
+                            selfReference: { size: 20, angle: Math.PI / 4 }
                             };
                             edgeMap.set(edgeKey, newEdge);
                             edges.add(newEdge);
