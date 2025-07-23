@@ -8,12 +8,13 @@
   <script src="js/theme.js" defer></script>
 </head>
 <body>
+  <!-- Use this for the nav section in all your HTML files -->
   <nav class="navbar glass">
     <div class="brand">
       <span class="brand-title">Automata Visualizer Pro</span>
     </div>
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html" class="active">Home</a></li>
       <li>
         <a href="nfa-to-dfa.html" class="nav-item-link">
           <span class="nav-label">NFA</span>
@@ -29,7 +30,7 @@
         </a>
       </li>
       <li>
-        <a href="nfa-to-regex.html" class="nav-item-link active">
+        <a href="nfa-to-regex.html" class="nav-item-link">
           <span class="nav-label">NFA</span>
           <span class="nav-arrow">→</span>
           <span class="nav-label">RegEx</span>
@@ -42,11 +43,34 @@
           <span class="nav-label">NFA</span>
         </a>
       </li>
- 
-      <li><a href="pda-to-cfg.html">PDA → CFG</a></li>
-      <li><a href="cfl-to-cfg.html">CFL → CFG</a></li>
-      <li><a href="tm-to-fa.html">TM → FA</a></li>
-      <li><a href="dfa-minimizer.html">DFA Minimizer</a></li>
+      <li>
+        <a href="pda-to-cfg.html" class="nav-item-link">
+          <span class="nav-label">PDA</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">CFG</span>
+        </a>
+      </li>
+      <li>
+        <a href="cfl-to-cfg.html" class="nav-item-link">
+          <span class="nav-label">CFL</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">CFG</span>
+        </a>
+      </li>
+      <li>
+        <a href="tm-to-fa.html" class="nav-item-link">
+          <span class="nav-label">TM</span>
+          <span class="nav-arrow">→</span>
+          <span class="nav-label">FA</span>
+        </a>
+      </li>
+      <li>
+        <a href="dfa-minimizer.html" class="nav-item-link">
+          <span class="nav-label">DFA</span>
+  
+          <span class="nav-label">Minimizer</span>
+        </a>
+      </li>
     </ul>
     <button id="theme-toggle" aria-label="Toggle theme"><span id="theme-icon">🌙</span></button>
   </nav>
@@ -103,4 +127,4 @@
   <script src="js/visual-builder.js"></script>
   <script src="js/nfa-to-regex.js"></script>
 </body>
-</html> 
+</html>

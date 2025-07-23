@@ -12,48 +12,72 @@
   <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 </head>
 <body>
-  <nav class="navbar glass">
-    <div class="brand">
-      <span class="brand-title">Automata Visualizer Pro</span>
-    </div>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li>
-        <a href="nfa-to-dfa.html" class="nav-item-link">
-          <span class="nav-label">NFA</span>
-          <span class="nav-arrow">→</span>
-          <span class="nav-label">DFA</span>
-        </a>
-      </li>
-      <li>
-        <a href="enfa-to-dfa.html" class="nav-item-link">
-          <span class="nav-label">ε-NFA</span>
-          <span class="nav-arrow">→</span>
-          <span class="nav-label">DFA</span>
-        </a>
-      </li>
-      <li>
-        <a href="nfa-to-regex.html" class="nav-item-link">
-          <span class="nav-label">NFA</span>
-          <span class="nav-arrow">→</span>
-          <span class="nav-label">RegEx</span>
-        </a>
-      </li>
-      <li>
-        <a href="regex-to-nfa.html" class="nav-item-link">
-          <span class="nav-label">RegEx</span>
-          <span class="nav-arrow">→</span>
-          <span class="nav-label">NFA</span>
-        </a>
-      </li>
-
-      <li><a href="pda-to-cfg.html" class="active">PDA → CFG</a></li>
-      <li><a href="cfl-to-cfg.html">CFL → CFG</a></li>
-      <li><a href="tm-to-fa.html">TM → FA</a></li>
-      <li><a href="dfa-minimizer.html">DFA Minimizer</a></li>
-    </ul>
-    <button id="theme-toggle" aria-label="Toggle theme"><span id="theme-icon">🌙</span></button>
-  </nav>
+  <!-- Use this for the nav section in all your HTML files -->
+<nav class="navbar glass">
+  <div class="brand">
+    <span class="brand-title">Automata Visualizer Pro</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li>
+      <a href="nfa-to-dfa.html" class="nav-item-link">
+        <span class="nav-label">NFA</span>
+        <span class="nav-arrow">→</span>
+        <span class="nav-label">DFA</span>
+      </a>
+    </li>
+    <li>
+      <a href="enfa-to-dfa.html" class="nav-item-link">
+        <span class="nav-label">ε-NFA</span>
+        <span class="nav-arrow">→</span>
+        <span class="nav-label">DFA</span>
+      </a>
+    </li>
+    <li>
+      <a href="nfa-to-regex.html" class="nav-item-link">
+        <span class="nav-label">NFA</span>
+        <span class="nav-arrow">→</span>
+        <span class="nav-label">RegEx</span>
+      </a>
+    </li>
+    <li>
+      <a href="regex-to-nfa.html" class="nav-item-link">
+        <span class="nav-label">RegEx</span>
+        <span class="nav-arrow">→</span>
+        <span class="nav-label">NFA</span>
+      </a>
+    </li>
+    <li>
+      <a href="pda-to-cfg.html" class="nav-item-link">
+        <span class="nav-label">PDA</span>
+        <span class="nav-arrow">→</span>
+        <span class="nav-label">CFG</span>
+      </a>
+    </li>
+    <li>
+      <a href="cfl-to-cfg.html" class="nav-item-link">
+        <span class="nav-label">CFL</span>
+        <span class="nav-arrow">→</span>
+        <span class="nav-label">CFG</span>
+      </a>
+    </li>
+    <li>
+      <a href="tm-to-fa.html" class="nav-item-link">
+        <span class="nav-label">TM</span>
+        <span class="nav-arrow">→</span>
+        <span class="nav-label">FA</span>
+      </a>
+    </li>
+    <li>
+      <a href="dfa-minimizer.html" class="nav-item-link">
+        <span class="nav-label">DFA</span>
+     
+        <span class="nav-label">Minimizer</span>
+      </a>
+    </li>
+  </ul>
+  <button id="theme-toggle" aria-label="Toggle theme"><span id="theme-icon">🌙</span></button>
+</nav>
   <main>
     <section class="glass" style="max-width: 900px; margin: 2rem auto; padding: 2rem;">
       <h1 class="gradient" style="font-size:2rem; font-weight:bold;">PDA → CFG Converter</h1>
@@ -88,57 +112,4 @@
     <span class="footer-text">© 2024 Automata Visualizer Pro</span>
     <span class="footer-icons">
       <a href="https://github.com/Husrocks" target="_blank" aria-label="GitHub" class="footer-icon-link">
-        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" class="footer-icon"><path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.5 2.87 8.32 6.84 9.67.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.36-3.37-1.36-.45-1.18-1.1-1.5-1.1-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.38 9.38 0 0 1 12 6.84c.85.004 1.7.12 2.5.35 1.9-1.33 2.74-1.05 2.74-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.8 0 .26.18.57.69.47A10.01 10.01 0 0 0 22 12.26C22 6.58 17.52 2 12 2Z"/></svg>
-      </a>
-      <a href="https://www.linkedin.com/in/hussnain-bashir/" target="_blank" aria-label="LinkedIn" class="footer-icon-link">
-        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" class="footer-icon"><path d="M16 8a6 6 0 0 1 6 6v5.25c0 .41-.34.75-.75.75h-3.5a.75.75 0 0 1-.75-.75V14a2 2 0 0 0-4 0v5.25c0 .41-.34.75-.75.75h-3.5A.75.75 0 0 1 4 19.25V8.75C4 8.34 4.34 8 4.75 8h3.5c.41 0 .75.34.75.75v10.5c0 .41-.34.75-.75.75h-3.5A.75.75 0 0 1 4 19.25Z"/></svg>
-      </a>
-      <a href="https://www.instagram.com/imhussnain.001/" target="_blank" aria-label="Instagram" class="footer-icon-link">
-        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" class="footer-icon"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="5"/><circle cx="18" cy="6" r="1.5"/></svg>
-      </a>
-    </span>
-  </footer>
-</body>
-<script>
-window.addEventListener('DOMContentLoaded', () => {
-  const examplesDiv = document.getElementById('examples-content');
-  if (!examplesDiv || !window.solvedExamples) return;
-  // Only show PDA→CFG examples
-  const examples = window.solvedExamples.filter(ex => ex.pda && ex.cfg);
-  if (examples.length === 0) {
-    examplesDiv.innerHTML = '<div style="color:#888">No solved examples available.</div>';
-    return;
-  }
-  examplesDiv.innerHTML = examples.map((ex, i) =>
-    `<button class="btn-secondary example-btn" data-idx="${i}">${ex.title}</button>`
-  ).join(' ');
-  examplesDiv.querySelectorAll('.example-btn').forEach(btn => {
-    btn.onclick = () => {
-      const idx = btn.getAttribute('data-idx');
-      const ex = examples[idx];
-      // Render PDA as NFA graph (if possible)
-      if (ex.pda) {
-        try {
-          new VisGraphRenderer('nfa-graph-vis').renderAutomaton(ex.pda, 'nfa');
-        } catch (e) {
-          document.getElementById('nfa-graph-vis').innerHTML = '<div style="color:red">Cannot render PDA as graph.</div>';
-        }
-      } else {
-        document.getElementById('nfa-graph-vis').innerHTML = '<div style="color:#888">No PDA to display.</div>';
-      }
-      // Show CFG as formatted, centered text
-      if (ex.cfg) {
-        let cfgText = `<div style='display:inline-block; text-align:left; font-size:1.1rem;'><b>Variables:</b> ${ex.cfg.variables.join(', ')}<br/><b>Terminals:</b> ${ex.cfg.terminals.join(', ')}<br/><b>Start:</b> ${ex.cfg.startVariable}<br/><b>Productions:</b><br/>`;
-        for (const v in ex.cfg.productions) {
-          cfgText += `${v} → ${ex.cfg.productions[v].join(' | ')}<br/>`;
-        }
-        cfgText += '</div>';
-        document.getElementById('dfa-graph-vis').innerHTML = cfgText;
-      } else {
-        document.getElementById('dfa-graph-vis').innerHTML = '<div style="color:#888">No CFG to display.</div>';
-      }
-      document.getElementById('steps-content').innerHTML = ex.steps.map(s => `<div class='step'>${s}</div>`).join('');
-    };
-  });
-});
-</script> 
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" class="footer-icon"><path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.5 2.87 8.32 6.84 9.67.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.36-3.37-1.36-.45-1.18-1.1-1.5-1.1-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.38 9.38 0 0 1 12 6.84c.85.004 1.7.12 2.5.35 1.9-1.33 2.74-1.05 2.74-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.8 0 .26.18.57.69.47A10.01 10.0
