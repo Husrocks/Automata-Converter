@@ -3,132 +3,204 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Automata Visualizer Pro</title>
+  <title>Automata Theory Visualizer Pro | Interactive CS Education & Research</title>
+  <meta name="description" content="Interactive step-by-step automata conversions, subset construction, Thompson algorithm, state elimination, and formal grammar analysis for students, educators, and CS researchers."/>
   <link rel="stylesheet" href="styles.css"/>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Global Shared Components Engine -->
+  <script src="js/components.js" defer></script>
   <script src="js/theme.js" defer></script>
 </head>
 <body>
-  <nav class="navbar glass">
-    <div class="brand">
-      <a href="index.html" class="brand-title">Automata Visualizer Pro</a>
-    </div>
-    <ul class="nav-links">
-      <li><a href="index.html" class="active">Home</a></li>
-      <li>
-        <a href="nfa-to-dfa.html" class="nav-item-link">
-          <span class="nav-label">NFA</span>
-          <span class="nav-arrow">→</span>
-          <span class="nav-label">DFA</span>
+  <div id="site-header-container"></div>
+
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-badge">
+        <i data-lucide="graduation-cap" class="badge-icon"></i>
+        <span>Designed for Students, Educators & CS Researchers</span>
+      </div>
+      <h1 class="hero-title">
+        Master Automata Theory with <span class="gradient">Step-by-Step Rigor</span>
+      </h1>
+      <p class="hero-description">
+        Transform abstract formal languages into interactive, visual computations. From NFA powerset constructions to Thompson's syntax trees, explore every transition with complete mathematical transparency.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#converter-catalog" class="btn btn-primary">
+          <i data-lucide="play-circle"></i>
+          <span>Explore Converters</span>
         </a>
-      </li>
-      <li>
-        <a href="enfa-to-dfa.html" class="nav-item-link">
-          <span class="nav-label">ε-NFA</span>
-          <span class="nav-arrow">→</span>
-          <span class="nav-label">DFA</span>
+        <a href="help.html" class="btn btn-secondary">
+          <i data-lucide="book-open"></i>
+          <span>How It Works & Guides</span>
         </a>
-      </li>
-      <li>
-        <a href="nfa-to-regex.html" class="nav-item-link">
-          <span class="nav-label">NFA</span>
-          <span class="nav-arrow">→</span>
-          <span class="nav-label">RegEx</span>
-        </a>
-      </li>
-      <li>
-        <a href="regex-to-nfa.html" class="nav-item-link">
-          <span class="nav-label">RegEx</span>
-          <span class="nav-arrow">→</span>
-          <span class="nav-label">NFA</span>
-        </a>
-      </li>
-      <li>
-        <a href="pda-to-cfg.html" class="nav-item-link">
-          <span class="nav-label">PDA</span>
-          <span class="nav-arrow">→</span>
-          <span class="nav-label">CFG</span>
-        </a>
-      </li>
-      <li>
-        <a href="cfl-to-cfg.html" class="nav-item-link">
-          <span class="nav-label">CFL</span>
-          <span class="nav-arrow">→</span>
-          <span class="nav-label">CFG</span>
-        </a>
-      </li>
-      <li>
-        <a href="tm-to-fa.html" class="nav-item-link">
-          <span class="nav-label">TM</span>
-          <span class="nav-arrow">→</span>
-          <span class="nav-label">FA</span>
-        </a>
-      </li>
-      <li>
-        <a href="dfa-minimizer.html" class="nav-item-link">
-          <span class="nav-label">DFA</span>
-          <span class="nav-label">Minimizer</span>
-        </a>
-      </li>
-    </ul>
-    <button id="theme-toggle" aria-label="Toggle theme"><span id="theme-icon">🌙</span></button>
-  </nav>
-  <header class="hero glass">
-    <h1>Automata Theory <span class="gradient">Visualizer Pro</span></h1>
-    <p>Interactive, step-by-step automata conversions for students and professionals.</p>
-  </header>
-  <main>
-    <section class="cards">
-      <a href="nfa-to-dfa.html" class="card glass">
-        <h2>NFA → DFA</h2>
-        <p>Convert Nondeterministic Finite Automata to DFA with visualization and examples.</p>
-      </a>
-      <a href="enfa-to-dfa.html" class="card glass">
-        <h2>ε-NFA → DFA</h2>
-        <p>Convert epsilon-NFA directly to DFA with visualization and examples.</p>
-      </a>
-      <a href="nfa-to-regex.html" class="card glass">
-        <h2>NFA → RegEx</h2>
-        <p>Convert NFA to regular expressions with step-by-step logic.</p>
-      </a>
-      <a href="regex-to-nfa.html" class="card glass">
-        <h2>RegEx → NFA</h2>
-        <p>Build NFAs from regular expressions using Thompson's construction.</p>
-      </a>
-      <a href="toa-to-fa.html" class="card glass">
-        <h2>TOA → FA</h2>
-        <p>Convert Turing-Recognizable languages to finite automata (approximate).</p>
-      </a>
-      <a href="pda-to-cfg.html" class="card glass">
-        <h2>PDA → CFG</h2>
-        <p>Convert pushdown automata to context-free grammars.</p>
-      </a>
-      <a href="cfl-to-cfg.html" class="card glass">
-        <h2>CFL → CFG</h2>
-        <p>Convert context-free grammars to pushdown automata.</p>
-      </a>
-      <a href="tm-to-fa.html" class="card glass">
-        <h2>TM → FA</h2>
-        <p>Approximate Turing Machine to finite automaton conversion.</p>
-      </a>
-      <a href="dfa-minimizer.html" class="card glass">
-        <h2>DFA Minimizer</h2>
-        <p>Minimize deterministic finite automata with visualization.</p>
-      </a>
+      </div>
+
+      <!-- 3 Theoretical Pillars -->
+      <div class="hero-features-grid">
+        <div class="feature-card glass">
+          <div class="feature-icon-wrapper">
+            <i data-lucide="git-merge" class="feature-icon"></i>
+          </div>
+          <h3>Step-by-Step Proofs</h3>
+          <p>Inspect intermediate ε-closure calculations, transition tables, and eliminated state equations.</p>
+        </div>
+        <div class="feature-card glass">
+          <div class="feature-icon-wrapper">
+            <i data-lucide="network" class="feature-icon"></i>
+          </div>
+          <h3>Interactive State Graphs</h3>
+          <p>Drag nodes, adjust edge weights, configure initial/final states, and export blackboard-ready diagrams.</p>
+        </div>
+        <div class="feature-card glass">
+          <div class="feature-icon-wrapper">
+            <i data-lucide="flask-conical" class="feature-icon"></i>
+          </div>
+          <h3>Formal CS Foundations</h3>
+          <p>Faithful implementations of canonical algorithms from Sipser, Hopcroft, and Ullman textbooks.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categorized Converter Catalog -->
+    <section class="catalog-section" id="converter-catalog">
+      <div class="section-header">
+        <h2 class="section-title">Automata <span class="gradient">Conversion Suite</span></h2>
+        <p class="section-subtitle">Select an algorithm to begin visual conversion and step-by-step state tracing.</p>
+      </div>
+
+      <div class="category-block">
+        <div class="category-title">
+          <i data-lucide="circle-dot"></i>
+          <span>Finite Automata & Regular Languages</span>
+        </div>
+        <div class="cards-grid">
+          <a href="nfa-to-dfa.html" class="converter-card glass">
+            <div class="card-badge badge-active">Ready</div>
+            <div class="card-icon-box"><i data-lucide="shuffle"></i></div>
+            <h3 class="card-title">NFA → DFA</h3>
+            <p class="card-desc">Convert non-deterministic automata to deterministic equivalents via powerset subset construction.</p>
+            <div class="card-footer-info">
+              <span class="algo-tag">Subset Construction</span>
+              <span class="card-arrow"><i data-lucide="arrow-right"></i></span>
+            </div>
+          </a>
+
+          <a href="enfa-to-dfa.html" class="converter-card glass">
+            <div class="card-badge badge-active">Ready</div>
+            <div class="card-icon-box"><i data-lucide="zap"></i></div>
+            <h3 class="card-title">ε-NFA → DFA</h3>
+            <p class="card-desc">Eliminate null transitions by computing complete state ε-closures before determinization.</p>
+            <div class="card-footer-info">
+              <span class="algo-tag">Epsilon Closure</span>
+              <span class="card-arrow"><i data-lucide="arrow-right"></i></span>
+            </div>
+          </a>
+
+          <a href="nfa-to-regex.html" class="converter-card glass">
+            <div class="card-badge badge-active">Ready</div>
+            <div class="card-icon-box"><i data-lucide="binary"></i></div>
+            <h3 class="card-title">NFA → RegEx</h3>
+            <p class="card-desc">Synthesize closed-form regular expressions from transition graphs using Arden's state elimination.</p>
+            <div class="card-footer-info">
+              <span class="algo-tag">State Elimination</span>
+              <span class="card-arrow"><i data-lucide="arrow-right"></i></span>
+            </div>
+          </a>
+
+          <a href="regex-to-nfa.html" class="converter-card glass">
+            <div class="card-badge badge-active">Ready</div>
+            <div class="card-icon-box"><i data-lucide="code-2"></i></div>
+            <h3 class="card-title">RegEx → NFA</h3>
+            <p class="card-desc">Parse arbitrary regular expressions into minimal-subgraph NFAs via Thompson's inductive construction.</p>
+            <div class="card-footer-info">
+              <span class="algo-tag">Thompson's Method</span>
+              <span class="card-arrow"><i data-lucide="arrow-right"></i></span>
+            </div>
+          </a>
+
+          <a href="dfa-minimizer.html" class="converter-card glass">
+            <div class="card-badge badge-warning">Experimental</div>
+            <div class="card-icon-box"><i data-lucide="minimize-2"></i></div>
+            <h3 class="card-title">DFA Minimizer</h3>
+            <p class="card-desc">Compute the unique minimal DFA by identifying indistinguishable states using table-filling equivalence.</p>
+            <div class="card-footer-info">
+              <span class="algo-tag">Table-Filling Equivalence</span>
+              <span class="card-arrow"><i data-lucide="arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="category-block">
+        <div class="category-title">
+          <i data-lucide="layers"></i>
+          <span>Pushdown Automata & Context-Free Languages</span>
+        </div>
+        <div class="cards-grid">
+          <a href="pda-to-cfg.html" class="converter-card glass">
+            <div class="card-badge badge-warning">Experimental</div>
+            <div class="card-icon-box"><i data-lucide="database"></i></div>
+            <h3 class="card-title">PDA → CFG</h3>
+            <p class="card-desc">Derive equivalent context-free grammar production rules [q, X, p] from stack transition specifications.</p>
+            <div class="card-footer-info">
+              <span class="algo-tag">Tri-Variable Derivation</span>
+              <span class="card-arrow"><i data-lucide="arrow-right"></i></span>
+            </div>
+          </a>
+
+          <a href="cfl-to-cfg.html" class="converter-card glass">
+            <div class="card-badge badge-active">Ready</div>
+            <div class="card-icon-box"><i data-lucide="list-tree"></i></div>
+            <h3 class="card-title">CFL → CFG</h3>
+            <p class="card-desc">Inspect and simplify Context-Free Grammar productions, terminals, and non-terminal variable sets.</p>
+            <div class="card-footer-info">
+              <span class="algo-tag">Grammar Simplification</span>
+              <span class="card-arrow"><i data-lucide="arrow-right"></i></span>
+            </div>
+          </a>
+
+          <a href="tm-to-fa.html" class="converter-card glass">
+            <div class="card-badge badge-warning">Experimental</div>
+            <div class="card-icon-box"><i data-lucide="cpu"></i></div>
+            <h3 class="card-title">TM → FA</h3>
+            <p class="card-desc">Explore bounded-tape approximations of Turing Machines into regular state machines for decidability analysis.</p>
+            <div class="card-footer-info">
+              <span class="algo-tag">Linear Bounded Automaton</span>
+              <span class="card-arrow"><i data-lucide="arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community & Academic Callout -->
+    <section class="audience-section glass">
+      <h2 class="section-title text-center">Built for the Academic & Engineering Community</h2>
+      <div class="audience-grid">
+        <div class="audience-card">
+          <div class="audience-icon"><i data-lucide="graduation-cap"></i></div>
+          <h4>For Students</h4>
+          <p>Gain visual intuition for homework questions. See exactly where trap states come from and verify your powerset truth tables with zero guesswork.</p>
+        </div>
+        <div class="audience-card">
+          <div class="audience-icon"><i data-lucide="presentation"></i></div>
+          <h4>For Educators</h4>
+          <p>Project clear, interactive state machines in lecture halls. Walk through algorithm steps at your own pace without drawing messy graphs on blackboards.</p>
+        </div>
+        <div class="audience-card">
+          <div class="audience-icon"><i data-lucide="terminal"></i></div>
+          <h4>For CS Researchers</h4>
+          <p>Validate formal language edge cases, examine state space growth, and test non-trivial grammar conversions in an open-source sandbox.</p>
+        </div>
+      </div>
     </section>
   </main>
-  <footer class="glass custom-footer">
-    <span class="footer-text">© 2024 Automata Visualizer Pro</span>
-    <span class="footer-icons">
-      <a href="https://github.com/Husrocks" target="_blank" aria-label="GitHub" class="footer-icon-link">
-        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" class="footer-icon"><path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.5 2.87 8.32 6.84 9.67.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.36-3.37-1.36-.45-1.18-1.1-1.5-1.1-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.38 9.38 0 0 1 12 6.84c.85.004 1.7.12 2.5.35 1.9-1.33 2.74-1.05 2.74-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.8 0 .26.18.57.69.47A10.01 10.01 0 0 0 22 12.26C22 6.58 17.52 2 12 2Z"/></svg>
-      </a>
-      <a href="https://www.linkedin.com/in/hussnain-bashir/" target="_blank" aria-label="LinkedIn" class="footer-icon-link">
-        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" class="footer-icon"><path d="M16 8a6 6 0 0 1 6 6v5.25c0 .41-.34.75-.75.75h-3.5a.75.75 0 0 1-.75-.75V14a2 2 0 0 0-4 0v5.25c0 .41-.34.75-.75.75h-3.5A.75.75 0 0 1 4 19.25V8.75C4 8.34 4.34 8 4.75 8h3.5c.41 0 .75.34.75.75v10.5c0 .41-.34.75-.75.75h-3.5A.75.75 0 0 1 4 19.25Z"/></svg>
-      </a>
-      <a href="https://www.instagram.com/imhussnain.001/" target="_blank" aria-label="Instagram" class="footer-icon-link">
-        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" class="footer-icon"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="5"/><circle cx="18" cy="6" r="1.5"/></svg>
-      </a>
-    </span>
-  </footer>
+
+  <div id="site-footer-container"></div>
 </body>
 </html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Help & Documentation | Automata Theory Visualizer Pro</title>
+  <meta name="description" content="Complete documentation, input guides, algorithm explanations, and troubleshooting for Automata Visualizer Pro."/>
+  <link rel="stylesheet" href="styles.css"/>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/components.js" defer></script>
+  <script src="js/theme.js" defer></script>
+</head>
+<body>
+  <div id="site-header-container"></div>
+
+  <main class="page-container">
+    <header class="page-hero text-center">
+      <div class="hero-badge">
+        <i data-lucide="help-circle" class="badge-icon"></i>
+        <span>User Guides & Theoretical Documentation</span>
+      </div>
+      <h1 class="page-title">How the Converters <span class="gradient">Work</span></h1>
+      <p class="page-subtitle">Learn input syntax conventions, algorithmic methodologies, and troubleshooting techniques.</p>
+    </header>
+
+    <!-- Quick Navigation Anchor Pills -->
+    <nav class="help-nav-pills glass" aria-label="Help Sections">
+      <a href="#syntax-guide"><i data-lucide="edit-3"></i> Input Conventions</a>
+      <a href="#algorithms"><i data-lucide="workflow"></i> Converter Algorithms</a>
+      <a href="#complexity"><i data-lucide="alert-triangle"></i> Complexity & Edge Cases</a>
+      <a href="#faq"><i data-lucide="message-circle"></i> Frequently Asked Questions</a>
+    </nav>
+
+    <!-- Section 1: Syntax & Notation -->
+    <section id="syntax-guide" class="content-block glass">
+      <div class="block-header">
+        <i data-lucide="edit-3" class="block-icon"></i>
+        <h2>1. State Builder & Input Conventions</h2>
+      </div>
+      <p>The interactive visual builder allows you to construct automata using intuitive controls:</p>
+      <div class="guide-grid">
+        <div class="guide-item">
+          <h4><i data-lucide="plus-circle"></i> Adding States</h4>
+          <p>Click <strong>+ Add State</strong> and enter a canonical label such as <code>q0</code>, <code>q1</code>, or <code>A</code>. Initial state markers will automatically attach arrows.</p>
+        </div>
+        <div class="guide-item">
+          <h4><i data-lucide="arrow-right-circle"></i> Adding Transitions</h4>
+          <p>Click <strong>→ Add Transition</strong>. Specify source state, input symbol (e.g. <code>0</code>, <code>1</code>, <code>a</code>, <code>b</code>), and target state.</p>
+        </div>
+        <div class="guide-item">
+          <h4><i data-lucide="zap"></i> Epsilon (Null) Transitions</h4>
+          <p>Use the exact character <code>ε</code> or input <code>eps</code>/<code>lambda</code>. The engine treats these as spontaneous moves without consuming tape input.</p>
+        </div>
+        <div class="guide-item">
+          <h4><i data-lucide="check-circle-2"></i> Final (Accepting) States</h4>
+          <p>Select any state and click <strong>Set Final</strong>. Accepting states render with a double border per standard theoretical notation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Core Converter Algorithms -->
+    <section id="algorithms" class="content-block glass">
+      <div class="block-header">
+        <i data-lucide="workflow" class="block-icon"></i>
+        <h2>2. Converter Algorithms Explained</h2>
+      </div>
+
+      <div class="accordion-item">
+        <h3><i data-lucide="shuffle"></i> NFA to DFA (Powerset Subset Construction)</h3>
+        <p>
+          Given an NFA $M = (Q, \Sigma, \delta, q_0, F)$, the converter computes the equivalent DFA $M' = (2^Q, \Sigma, \delta', \{q_0\}, F')$. 
+          The engine begins at $\{q_0\}$ and iteratively computes the target composite state for every symbol $a \in \Sigma$ using $\delta'(R, a) = \bigcup_{r \in R} \delta(r, a)$. Dead/trap states are grouped explicitly into $\emptyset$.
+        </p>
+      </div>
+
+      <div class="accordion-item">
+        <h3><i data-lucide="binary"></i> NFA to Regular Expression (State Elimination Method)</h3>
+        <p>
+          The converter normalizes the automaton into a Generalized Transition Graph (GNFA) with a single initial state and single accepting state. States are eliminated one by one, updating parallel and sequential transition expressions using Arden's algebraic rule: $R_{ij} \leftarrow R_{ij} \cup R_{ik}(R_{kk})^*R_{kj}$.
+        </p>
+      </div>
+
+      <div class="accordion-item">
+        <h3><i data-lucide="code-2"></i> Regular Expression to NFA (Thompson's Construction)</h3>
+        <p>
+          Constructs an NFA inductively from regular expressions using standard primitive subgraphs for union ($r_1 \mid r_2$), concatenation ($r_1 r_2$), and Kleene star ($r_1^*$). Each sub-automaton has exactly one initial and one accept state connected via $\varepsilon$-transitions.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 3: Complexity & Edge Cases -->
+    <section id="complexity" class="content-block glass">
+      <div class="block-header">
+        <i data-lucide="alert-triangle" class="block-icon"></i>
+        <h2>3. Computational Complexity & Edge Cases</h2>
+      </div>
+      <div class="callout callout-warning">
+        <i data-lucide="alert-circle" class="callout-icon"></i>
+        <div>
+          <strong>State Space Explosion ($O(2^{|Q|})$):</strong>
+          In worst-case scenarios, converting an NFA with $n$ states can produce up to $2^n$ DFA states. For browser stability, we recommend keeping visual NFA inputs under 12 states.
+        </div>
+      </div>
+      <ul class="spec-list">
+        <li><strong>Unreachable States:</strong> The subset construction algorithm only generates states reachable from the initial state, preventing unnecessary $2^n$ bloat.</li>
+        <li><strong>Ambiguous RegEx:</strong> Always use explicit parentheses (e.g. <code>(a|b)*abb</code>) to avoid operator precedence errors between concatenation and union.</li>
+      </ul>
+    </section>
+
+    <!-- Section 4: FAQ -->
+    <section id="faq" class="content-block glass">
+      <div class="block-header">
+        <i data-lucide="message-circle" class="block-icon"></i>
+        <h2>4. Frequently Asked Questions</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Can I export the generated graph diagrams for lecture slides or papers?</summary>
+          <p>Yes! You can right-click the interactive canvas to save high-resolution PNG images directly, or copy the tabular transition matrix text into LaTeX.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Why is the DFA Minimizer or PDA to CFG marked as "Experimental"?</summary>
+          <p>The visual builder UI is functional, while full algorithmic calculation engines for these modules are undergoing rigorous theoretical verification before final stabilization.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer-container"></div>
+</body>
+</html>

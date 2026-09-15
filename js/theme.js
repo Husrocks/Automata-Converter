@@ -1,13 +1,48 @@
-const btn = document.getElementById('theme-toggle');
-const icon = document.getElementById('theme-icon');
-btn.onclick = () => {
-  document.body.classList.toggle('dark');
-  icon.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-  localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-};
-window.onload = () => {
-  if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark');
-    icon.textContent = '☀️';
+/**
+ * Automata Visualizer Pro - Theme Controller
+ * Handles light/dark mode persistence and Lucide Icon synchronization.
+ */
+
+(function () {
+  'use strict';
+
+  function applyTheme(isDark) {
+    if (isDark) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+
+    const themeIcon = document.getElementById('theme-icon');
+    if (themeIcon) {
+      themeIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+    }
   }
-}; 
+
+  function initTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+    applyTheme(isDark);
+
+    // Global event delegation for #theme-toggle button
+    document.addEventListener('click', function (e) {
+      const toggleBtn = e.target.closest('#theme-toggle');
+      if (!toggleBtn) return;
+
+      const currentlyDark = document.body.classList.contains('dark');
+      const nextDark = !currentlyDark;
+      applyTheme(nextDark);
+      localStorage.setItem('theme', nextDark ? 'dark' : 'light');
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTheme);
+  } else {
+    initTheme();
+  }
+})();

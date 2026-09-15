@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us | Automata Theory Visualizer Pro</title>
+  <meta name="description" content="Discover the story, mission, and educational vision behind Automata Theory Visualizer Pro."/>
+  <link rel="stylesheet" href="styles.css"/>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/components.js" defer></script>
+  <script src="js/theme.js" defer></script>
+</head>
+<body>
+  <div id="site-header-container"></div>
+
+  <main class="page-container">
+    <header class="page-hero text-center">
+      <div class="hero-badge">
+        <i data-lucide="info" class="badge-icon"></i>
+        <span>Our Mission & Vision</span>
+      </div>
+      <h1 class="page-title">Making Formal Languages <span class="gradient">Intuitive & Transparent</span></h1>
+      <p class="page-subtitle">Demystifying theoretical computer science through interactive mathematics, real-time graph visualization, and open educational tools.</p>
+    </header>
+
+    <!-- Origin Story Section -->
+    <section class="content-block glass">
+      <div class="block-header">
+        <i data-lucide="book-open" class="block-icon"></i>
+        <h2>The Project Story</h2>
+      </div>
+      <p>
+        Automata Theory and Formal Languages form the backbone of modern computation, compiler construction, and algorithm analysis. Yet for decades, computer science students and educators have struggled with a recurring challenge: <em>abstract state diagrams written statically on blackboards lack dynamic feedback</em>.
+      </p>
+      <p>
+        When computing powersets during NFA-to-DFA subset construction or tracking recursive substitutions in Arden's theorem, human error is common. <strong>Automata Visualizer Pro</strong> was founded by <strong>Hussnain Bashir</strong> to eliminate this friction by bridging the gap between rigorous mathematical proofs and interactive, visual feedback.
+      </p>
+    </section>
+
+    <!-- Core Pillars Grid -->
+    <section class="pillars-section">
+      <h2 class="section-title text-center">Our Core Educational Pillars</h2>
+      <div class="pillars-grid">
+        <div class="pillar-card glass">
+          <div class="pillar-icon-box"><i data-lucide="eye"></i></div>
+          <h3>Radical Transparency</h3>
+          <p>No black boxes. Every conversion step shows intermediate epsilon closures, transition matrices, and algebraic formulas.</p>
+        </div>
+        <div class="pillar-card glass">
+          <div class="pillar-icon-box"><i data-lucide="cpu"></i></div>
+          <h3>Client-Side Privacy & Speed</h3>
+          <p>100% client-side JavaScript. No graph data or expressions are sent to external servers. Conversions run instantaneously in your browser.</p>
+        </div>
+        <div class="pillar-card glass">
+          <div class="pillar-icon-box"><i data-lucide="graduation-cap"></i></div>
+          <h3>Classroom Pedagogical Rigor</h3>
+          <p>Standardized tuple notation ($Q, \Sigma, \delta, q_0, F$) aligning with canonical CS curricula globally (Sipser, Ullman).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech Stack Summary -->
+    <section class="content-block glass">
+      <div class="block-header">
+        <i data-lucide="code" class="block-icon"></i>
+        <h2>Engineered with Vanilla Web Standards</h2>
+      </div>
+      <p>
+        Automata Visualizer Pro is intentionally engineered without heavy frameworks to ensure long-term archival stability, zero build-step overhead, and lightweight execution on classroom hardware:
+      </p>
+      <ul class="spec-list">
+        <li><strong>Vanilla ES6+ JavaScript:</strong> Pure algorithmic execution without abstraction tax.</li>
+        <li><strong>Vis.js Network Engine:</strong> Interactive, physics-stabilized canvas rendering for complex state graphs.</li>
+        <li><strong>CSS3 Glassmorphism:</strong> High-legibility UI supporting system light and dark themes.</li>
+        <li><strong>Lucide Icons:</strong> Consistent, accessible SVG iconography.</li>
+      </ul>
+    </section>
+  </main>
+
+  <div id="site-footer-container"></div>
+</body>
+</html>
