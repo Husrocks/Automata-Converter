@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
   
   # ⚙️ Automata Visualizer Pro
 
@@ -40,9 +40,9 @@ Automata Visualizer Pro supports **9 Integrated Converters** categorized across 
 
 ### 🔤 Regular Expressions
 * **NFA to Regular Expression:** Utilizes Arden's Theorem and the State Elimination method.
-* **Regular Expression to NFA:** Inductive compilation using Thompson's Construction with proper $\varepsilon$-links.
+* **Regular Expression to NFA:** Inductive compilation using Thompson's Construction with proper ε-links.
 
-### 📜 Grammars & Turing Machines
+### 🌳 Grammars & Turing Machines
 * **PDA to CFG:** Converts Pushdown Automata execution paths into Context-Free Grammars.
 * **CFL to CFG:** Generators for Context-Free Languages.
 * **Turing Machine to FA:** Experimental reduction modules.
@@ -60,21 +60,22 @@ Automata Visualizer Pro supports **9 Integrated Converters** categorized across 
 
 ---
 
-## 💻 Installation & Local Setup
+## 🚀 Installation & Local Setup
 
 Automata Visualizer Pro is intentionally engineered without heavy UI frameworks (React, Vue) to ensure long-term archival stability, zero build-step overhead, and lightweight execution on classroom hardware.
 
 There are **no build steps, bundlers, or server dependencies** required to run it locally.
 
 1. **Clone the repository:**
-   ```bash
+   \\\ash
    git clone https://github.com/Husrocks/Automata-Converter.git
    cd Automata-Converter
-   ```
+   \\\
 2. **Run it:**
-   Simply double-click `index.html` to open it in any modern web browser (Chrome, Firefox, Safari, Edge).
+   Simply double-click index.html to open it in any modern web browser (Chrome, Firefox, Safari, Edge).
    
-   *(Alternatively, you can serve it via a simple local server like `npx serve` or VSCode Live Server to prevent strict CORS policies on local SVG loading).*
+   *(Alternatively, you can serve it via a simple local server like 
+px serve or VSCode Live Server to prevent strict CORS policies on local SVG loading).*
 
 ---
 
@@ -82,8 +83,8 @@ There are **no build steps, bundlers, or server dependencies** required to run i
 
 ### Creating an Automaton visually
 1. Navigate to any converter (e.g., **NFA to DFA**).
-2. Click **+ Add State** to create nodes. The first node automatically becomes the initial state ($q_0$).
-3. Click **→ Add Transition**, select a source and target state, and input the transition symbol (use `ε` or `eps` for spontaneous transitions).
+2. Click **+ Add State** to create nodes. The first node automatically becomes the initial state (q0).
+3. Click **+ Add Transition**, select a source and target state, and input the transition symbol (use ε or eps for spontaneous transitions).
 4. Select a state and click **Set Final** to mark it as an accepting state (double circle).
 
 ### Running a Conversion
@@ -97,11 +98,11 @@ There are **no build steps, bundlers, or server dependencies** required to run i
 
 Recent architectural updates have centralized the UI to prevent code duplication and provide a seamless SPA-like feel:
 
-* **`index.html`** - The primary Hero landing page and visual catalog.
-* **`styles.css`** - Global CSS tokens, dark mode toggle logic, and responsive grid layouts.
-* **`js/components.js`** - Centralized DOM injection engine. Dynamically loads the professional Navbar and Footer.
-* **`js/theme.js`** - Manages `localStorage` persistence for the Light/Dark mode toggle.
-* **`[converter].html`** - Independent module pages containing their respective algorithms and Vis.js initializers.
+* **index.html** - The primary Hero landing page and visual catalog.
+* **styles.css** - Global CSS tokens, dark mode toggle logic, and responsive grid layouts.
+* **js/components.js** - Centralized DOM injection engine. Dynamically loads the professional Navbar and Footer.
+* **js/theme.js** - Manages localStorage persistence for the Light/Dark mode toggle.
+* **[converter].html** - Independent module pages containing their respective algorithms and Vis.js initializers.
 
 ---
 
@@ -110,9 +111,9 @@ Recent architectural updates have centralized the UI to prevent code duplication
 Contributions from the academic and open-source community are highly encouraged! Whether you are implementing a new conversion algorithm, optimizing graph rendering, or improving accessibility, your help is welcome.
 
 1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
+2. Create your Feature Branch (\git checkout -b feature/AmazingFeature\)
+3. Commit your Changes (\git commit -m 'Add some AmazingFeature'\)
+4. Push to the Branch (\git push origin feature/AmazingFeature\)
 5. Open a Pull Request
 
 *Please ensure any UI additions utilize the existing Glassmorphism CSS classes and inline SVG iconography.*
@@ -121,9 +122,11 @@ Contributions from the academic and open-source community are highly encouraged!
 
 ## 📄 License
 
-This project is open-source and available under the **MIT License**. See the `LICENSE` file for more information.
+This project is open-source and available under the **MIT License**. See the LICENSE file for more information.
 
-## 🎓 Acknowledgments
+---
+
+## 🏆 Acknowledgments
 
 * Designed and Developed by **Hussnain Bashir**.
 * Built upon classical theoretical computer science algorithms defined by Michael Sipser and Jeffrey Ullman.
