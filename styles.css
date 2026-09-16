@@ -304,6 +304,12 @@ body {
   font-family: 'Poppins', 'Inter', 'Segoe UI', sans-serif;
   margin: 0;
 }
+body.dark {
+  --bg: #0f172a;
+  --card-bg: rgba(30, 41, 59, 0.85);
+  --text: #f8fafc;
+  --shadow: 0 4px 32px 0 rgba(0,0,0,0.40);
+}
 .glass {
   background: var(--card-bg);
   backdrop-filter: blur(12px) saturate(180%);
